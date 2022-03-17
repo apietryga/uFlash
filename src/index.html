@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>uFlash v.1.0</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" href="inc/styles/main.css"/>
+	</head>
+	<body>
+		<center id="loader">
+			<img class="loader_img"  src='inc/img/loader.gif' loop=infinite />
+		</center>
+		<!--
+		<div style="z-index:6;position:fixed;" onclick="gestDone()">GEST</div>
+	<!-- GESTURES -->
+		<div id="gesture">
+			<img id="ge0" class="gestPic" src="inc/img/gesture/0.png" />
+			<img id="ge1" class="gestPic" src="inc/img/gesture/1.png" />
+			<img id="ge2" class="gestPic" src="inc/img/gesture/2.png" />
+			<img id="ge3" class="gestPic" src="inc/img/gesture/3.png" />
+			<img id="ge4" class="gestPic" src="inc/img/gesture/4.png" />
+		</div>
+	<!-- END OF GESTURES -->
+		<table id="mainscene">
+			<tr>
+				<td class="mainsceneTD">
+					<div id="disMess"></div>
+					<div id="countP"></div>
+				</td>
+			</tr>
+			<tr>
+				<td id="odliczField"></td>
+			</tr>
+		</table>
+	<!-- FUNKCYJNE -->
+		<div id="plotter"></div>
+		<div id="dodruk"></div>
+		<div id="gestVal" style="color:#fff;position:absolute;top:0;left:0;font-size:10em;z-index:2;"></div>
+		<div id="gestVal2" style="color:#fff;position:absolute;top:100px;left:0;font-size:10em;z-index:2;"></div>
+		<div class="camDIV">
+			<div id="message">Ładowanie ... </div>
+			<video id="webcam" autoplay width="640" height="480"></video>
+			<canvas id="canvas-source" width="640" height="480" style="margin-top: 12%; margin-left: 25%; border: 4px solid #999; padding: 2px;"></canvas>
+			<canvas id="canvas-blended" width="640" height="480"></canvas>
+			<div id="buttons"  style="margin-top: 12%; margin-left: 25%; border: none;">
+				<div id="front">
+					<img id="button0" src="inc/img/gesture/b1.png"/>
+					<img id="button1" src="inc/img/gesture/b2.png"/>
+					<img id="button2" src="inc/img/gesture/b4.png"/>
+					<img id="button3" src="inc/img/gesture/b.png"/>
+				</div>
+			</div>
+		</div>
+		<div class="results">
+		</div>
+		<!-- do renderów -->
+		<input id="filledTemplate" name="file" style='display:none;'/>
+		<!-- end of do renderów -->	
+	<!-- END OF FUNKCYJNE -->
+	</body>
+<script src="inc/js/jquery.js"></script>
+<script src="inc/js/buffer-loader.js"></script>
+<script src="inc/js/html2canvas.js"></script>
+<script src="inc/js/app.js"></script>
+<script src="inc/js/face_recognition.js"></script>
+
+<script>
+	window.odliczOD = 10; // ODLICZANIE SEC. 
+	/* ^^poprawić na 10*/
+	window.fotaPO = 5; // PO ILU MA WEJŚĆ CAPTURE SEC
+	/* ^^poprawić na 5*/
+	window.RobieFoto = 0; // app.js
+	window.lastCaptured = 0;
+	window.photox = [];
+	window.nrofpic = 0;	
+	window.kolejkaDruku = 0;
+	window.allowScreen6 = false;
+	function displayScreen(id,x = 0){
+		console.log("SCREEN ID: "+id);
+		val = "";
+		if(id == 0){
+			document.getElementById("gesture").style.display = "block";
+			document.getElementById("ge0").style.display = "block";
+			newGesture(0);
+		}
+		if(id == 1){
+			ledON();
+			document.getElementById("ge4").style.display = "block";
+			document.getElementById("gesture").style.display = "block";
+			setTimeout(function(){
+				document.getElementById("gesture").style.display = "none";
+				document.getElementById("ge4").style.display = "none";
+				val = "PIERWSZE ZDJĘCIE ZA<br />";
+				document.getElementById("disMess").innerHTML = val;
+				odlicz(window.odliczOD,id);			
+			},1000);
+			
+		}
+		if(id == 2){
+			document.getElementById("countP").innerHTML = "";
+			val = "DRUGIE ZDJĘCIE ZA";
+			odlicz(window.odliczOD,id);
+		}
+		if(id == 3){
+			document.getElementById("countP").innerHTML = "";
+			val = "OSTATNIE ZDJĘCIE ZA";
+			odlicz(window.odliczOD,id);
+		}
+		if(id == 4){
+			ledOFF();
+			document.getElementById("countP").innerHTML = "";
+			val += "LICZĘ OSOBY NA ZDJĘCIU";
+			console.log("PREPARING PHOTO TEMPLATE");
+			src = "inc/img/captured_small/small_"+window.lastCaptured;
+			console.log("IMG SRC: "+src);
+			fDetect(src,function(){
+				setPhoto(function(){
+					renderPicture(function() {
+						for(x = 0; x < window.osoby; x++){
+							drukuj();
+						}
+						displayScreen(5);
+					});
+				});
+			});
+		}
+		if(id == 6){
+			val += "ODBIERZ ZDJĘCIA";	
+			odbior = setTimeout(function(){
+				window.RobieFoto = 0;
+				displayScreen(0);
+				checkGest(0);
+				clearTimeout(odbior);
+				var liczGest = setInterval(myTimer, 1000);				
+			},5000)
+		}
+		if(id != 5){
+			document.getElementById("disMess").innerHTML = val;
+		}else{
+			checkPrint(function() {
+				if(window.kolejkaDruku == 0 && window.allowScreen6 == true){
+					window.allowScreen6 = false;
+				}else{
+					if(window.kolejkaDruku != 0){
+						val += "DRUKUJĘ "+window.kolejkaDruku+" ZDJĘĆ";
+						document.getElementById("disMess").innerHTML = val;
+						displayScreen(5);
+					}
+				}
+			}); 
+		}
+	}
+	function capture(id){
+		document.getElementById("loader").style.display = "block";
+		var t0 = performance.now();
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {				
+				var t1 = performance.now();
+				document.getElementById("loader").style.display = "none";
+				window.lastCaptured = this.responseText;
+				console.log("CAPTURE TIME: " + Math.round(((t1 - t0)/1000)*100)/100 + " SEC");
+				displayScreen(id+1);
+			}
+		};
+	  xhttp.open("GET", "inc/php/functions.php?capture=true", true);
+	  xhttp.send();
+	}
+	function setPhoto(_callback){
+	  var xhttp = new XMLHttpRequest();
+	  xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			phtx = eval(this.responseText);
+			drawImage('5x15',phtx);
+			_callback();
+		}
+	  };
+	  xhttp.open("GET", "inc/php/functions.php?photos=true", true);
+	  xhttp.send();		
+	}
+	function ledON(_callback){
+	console.log("LED ON");
+	  var xhttp = new XMLHttpRequest();
+	  xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+	//		_callback();
+		}
+	  };
+	  xhttp.open("GET", "inc/php/functions.php?led=on", true);
+	  xhttp.send();		
+	}
+	function ledOFF(_callback){
+		console.log("LED OFF");
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+	//		_callback();
+		}
+	  };
+	  xhttp.open("GET", "inc/php/functions.php?led=off", true);
+	  xhttp.send();		
+	}
+	function drukuj(){
+	  var xhttp = new XMLHttpRequest();
+	  xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+		//	displayScreen(5);
+		}
+	  };
+	  xhttp.open("GET", "inc/php/functions.php?print=true", true);
+	  xhttp.send();					
+	}
+	function checkPrint(_callback){
+	  var xhttp = new XMLHttpRequest();
+	  xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			if(this.responseText == 0){
+				setTimeout(function(){
+					displayScreen(6);
+				},1000);
+			}
+			window.kolejkaDruku = this.responseText;
+			_callback();
+		}
+	  };
+	  xhttp.open("GET", "inc/php/functions.php?checkstatus=true", true);
+	  xhttp.send();					
+	}	
+	function drawImage(size,pht,side = 'center'){
+	// obszar drukowanego zdjęcia:
+		var dodruk = document.createElement('DIV');
+		dodruk.style.width = '2400px';
+		dodruk.style.height = '3600px';
+		dodruk.style.backgroundColor = "#fff";
+	//template1
+		var templateDIV = document.createElement('DIV');
+		templateDIV.id = "temp1";
+		templateDIV.style.position = "absolute";
+		templateDIV.style.zIndex = "2";
+	// nakładamy template:	
+		var templateIMG = document.createElement('IMG');
+		templateIMG.style.position = "absolute";
+		templateIMG.src = "inc/img/templates/"+pht[3];
+		templateIMG.style.width = "1200px";
+		templateIMG.style.height = "3600px";
+		templateIMG.style.zIndex = "1";
+			
+		templateDIV.appendChild(templateIMG);
+		dodruk.appendChild(templateDIV);
+	// zrobione zdjęcia
+		photo = [];
+		for(x = 0; x <= 2; x++){
+			photo[x] = document.createElement('IMG');
+			photo[x].src = pht[x];
+			photo[x].style.zIndex = "2";
+			photo[x].style.position = "absolute";
+			photo[x].style.offsetLeft = "1200px";
+			photo[x].style.width = "1006px";
+			photo[x].style.height = "670px";
+			photo[x].style.margin = "100px 0 0 100px";
+			if(x == 1){
+				photo[x].style.marginTop = "870px";
+			}
+			if(x == 2){
+				photo[x].style.marginTop = "1640px";
+			}
+			templateDIV.appendChild(photo[x]);
+		}
+	// dublujemy zdjęcie i wstawiamy je obok (tylko przy 10x15)
+		if(size == "10x15"){
+			var templateDIV2 = document.createElement('DIV');
+			templateDIV2.id = "temp2";
+			templateDIV2.style.position = "absolute";
+			templateDIV2.style.zIndex = "2";
+			templateDIV2.style.marginLeft = "600px";
+			dodruk.appendChild(templateDIV2);
+		}
+	// ustawiamy zdjęcie w dobrym miejscu (tylko 5x15)	
+		if(size == "5x15"){
+			if(side == "right"){
+				templateDIV.style.marginLeft = "370px";
+			}
+			if(side == "center"){
+//				templateDIV.style.marginLeft = "92.5px";
+				templateDIV.style.marginLeft = "600px";
+			}
+		}
+	// wpinamy wszystko do diva dodruk
+		var dd = document.getElementById("plotter");
+		dd.innerHTML = "";
+		dd.appendChild(dodruk);
+	
+	//uzupełniamy drugie foto:
+		if(size == "10x15"){
+			document.getElementById('temp2').innerHTML = document.getElementById('temp1').innerHTML;
+		}
+	}
+	function renderPicture(_callback){
+		var divname = "plotter";
+		var div = document.getElementById(divname);
+		html2canvas([div], {
+			onrendered: function(canvas) {
+			   var src = canvas.toDataURL('image/png');
+				var formdata = new FormData();
+				var divId = document.getElementById("filledTemplate");
+				formdata.append(divId.name, src);
+				var xmlhttp;
+				if(window.XMLHttpRequest){
+					xmlhttp = new XMLHttpRequest;
+				}else{
+					xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+				}
+				xmlhttp.onreadystatechange = function(){
+				   if(xmlhttp.readyState == 4 && xmlhttp.status == 200){
+						div.style.display = "none";
+						_callback();
+				   }
+				}
+				xmlhttp.open("POST", "inc/php/functions.php?upload=true");
+				xmlhttp.send(formdata);
+				
+			}
+		});
+	}
+	function newGesture(id){
+		for(x = 0; x <= 3; x++){
+			document.getElementById("ge"+x).style.display = "none";
+		}
+		if(id < 4){
+			document.getElementById("ge"+id).style.display = "block";
+		}
+	}
+	function fade(element) {
+		var op = 1;  // initial opacity
+		var timer = setInterval(function () {
+			if (op <= 0.1){
+				clearInterval(timer);
+				element.style.display = 'none';
+			}
+			element.style.opacity = op;
+			element.style.filter = 'alpha(opacity=' + op * 100 + ")";
+			op -= op * 0.1;
+		}, 50);
+	}
+	function odlicz(x,nr_zdjecia){
+		window.czas = x;
+		window.intervalx = setInterval(function(){
+			odliczanie(x,nr_zdjecia);
+			window.czas--;
+		},1000);
+	}
+	function odliczanie(x,nr_zdjecia){
+		document.getElementById("countP").innerHTML = window.czas;
+		if (window.czas < window.fotaPO){
+			console.log("SENDING CAPTURE "+nr_zdjecia);
+			capture(nr_zdjecia);
+			clearInterval(window.intervalx);
+			document.getElementById("disMess").innerHTML = "";
+		}
+	}
+	window.gestNote = 0;
+	window.lGn = 0; 
+	window.stoptimer = 0;
+	var liczGest = setInterval(myTimer, 200);
+	function checkGest(id){
+		if(window.stoptimer == 1){
+			window.stoptimer = 0;
+			if(window.gestNote == 3 && id == 3){
+				if(window.RobieFoto == 0){
+					window.RobieFoto = 1;
+					window.gestNote = 4;
+					console.log("GESTURE PASSED");
+					skonczGest();
+					displayScreen(1);
+					// BANG
+				}
+			}else if(window.gestNote == id){
+				window.gestNote++;
+			}else if(window.gestNote == id+1 ){
+				// next step to BANG! 
+			}else{
+				window.gestNote = 0;
+			}
+			document.getElementById("gestVal").innerHTML = "["+window.gestNote+"]";
+			newGesture(window.gestNote);
+		}
+	}
+	function myTimer(){
+		window.stoptimer = 1;
+	}
+	function skonczGest(){
+		document.getElementById("gesture").style.display = "none";
+		clearInterval(liczGest);		
+	}
+	function faceRec(){
+		return 1;
+	}
+	window.onload = start_media();
+	displayScreen(0);
+	// development
+	function gestDone(){
+		window.stoptimer = 1;
+		window.RobieFoto = 0;
+		window.gestNote = 3;
+		checkGest(3);
+	}
+	// end of development
+	// wykrywanie twarzy
+	function renderImg(src,_callback){
+		var div = document.createElement("div");
+		div.id = "dCoint";
+		div.className = "detect-contrainer";
+		var img = document.createElement("img");
+		img.id = "img";
+		img.src = src;
+		div.appendChild(img);
+		document.body.appendChild(div);
+		setTimeout(function(){
+			_callback();
+		},100)
+	}
+	function facedetection(_callback){
+		window.osoby = 0;
+		var img = document.getElementById('img'); 
+		var tracker = new tracking.LandmarksTracker();
+		tracker.setInitialScale(4);
+		tracker.setStepSize(2);
+		tracker.setEdgesDensity(0.1);
+		tracking.track('#img', tracker);
+		tracker.on('track', function(event) {
+				if(!event.data) return;
+				event.data.faces.forEach(function(rect) {
+				window.osoby++;		
+			});
+		});
+		setTimeout(function(){
+			_callback();
+		},100);
+	}
+	function fDetect(src,_callback){
+		renderImg(src,function(){
+			facedetection(function(){
+				console.log("DETECT "+window.osoby+" PERSON/S");
+				_callback();
+			});
+		});
+	}
+</script>
+</html>
