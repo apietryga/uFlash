@@ -1,0 +1,1 @@
+wmic printjob get

@@ -1,1 +1,0 @@
-C:\xampp\htdocs\inc\irfan\i_view64.exe C:\xampp\htdocs\inc\img\results\forprinter.jpg /print

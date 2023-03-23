@@ -1,0 +1,1 @@
+C:\xampp\htdocs\inc\digicam\CameraControlCmd.exe /folder C:\xampp\htdocs\inc\img\captured /captureall
