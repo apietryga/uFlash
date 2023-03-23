@@ -37,6 +37,15 @@
 				</div>
 			<!-- </div> -->
 		</div>
+		<div class="btns">
+			<button onclick="newGesture(0)">B0</button>
+			<button onclick="newGesture(1)">B1</button>
+			<button onclick="newGesture(2)">B2</button>
+			<button onclick="newGesture(3)">B3</button>
+			<button onclick="newGesture(4)">B4</button>
+		</div>
+
+
 	<!-- END OF GESTURES -->
 		<table id="mainscene">
 			<tr>
@@ -340,6 +349,10 @@
 		});
 	}
 	function newGesture(id){
+		let gA = document.querySelector(".gestureAnimation")
+		gA.classList = ["gestureAnimation"]
+		gA.classList.add("ga" + id)
+
 		for(x = 0; x <= 3; x++){
 			document.getElementById("ge"+x).style.display = "none";
 		}
@@ -462,5 +475,13 @@
 			});
 		});
 	}
+</script>
+
+<script>
+// debug development
+// displayScreen(1, 0)
+newGesture(2)
+
+
 </script>
 </html>
