@@ -39,7 +39,9 @@ module.exports = new class ImageController {
    * @param {Object} res - Response object
    * @returns {Object} - Returns a JSON object
    */
-  capturePOST (req, res) {
+  capturePOST (
+    
+    req, res) {
     // console.log({ req })
     const tempPath = req.file.path;
 
