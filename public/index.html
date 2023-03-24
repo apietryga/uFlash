@@ -15,14 +15,7 @@
 		<!--
 		<div style="z-index:6;position:fixed;" onclick="gestDone()">GEST</div>
 		-->
-	<!-- GESTURES -->
-		<!-- <div id="gesture">
-			<img id="ge0" class="gestPic" src="inc/img/gesture/0.png" />
-			<img id="ge1" class="gestPic" src="inc/img/gesture/1.png" />
-			<img id="ge2" class="gestPic" src="inc/img/gesture/2.png" />
-			<img id="ge3" class="gestPic" src="inc/img/gesture/3.png" />
-			<img id="ge4" class="gestPic" src="inc/img/gesture/4.png" /> 
-		</div> -->
+		<!-- GESTURES -->
 		<div class="gestureWrapper">
 			<div class="gesture">
 					<?xml version="1.0" encoding="UTF-8"?>
@@ -59,8 +52,6 @@
 				</svg>
 			</div>
 		</div>
-								<!-- stroke="#f00" stroke-linejoin="round" stroke-width="15" fill="none" -->
-
 		<div class="btns">
 			<button onclick="newGesture(0)">B0</button>
 			<button onclick="newGesture(1)">B1</button>
@@ -129,17 +120,17 @@
 		console.log("SCREEN ID: "+id);
 		val = "";
 		if(id == 0){
-			document.getElementById("gesture").style.display = "flex";
-			document.getElementById("ge0").style.display = "block";
+			document.querySelector(".gesture").style.display = "flex";
+			document.querySelector(".ge0").style.display = "block";
 			newGesture(0);
 		}
 		if(id == 1){
 			ledON();
 			document.getElementById("ge4").style.display = "block";
-			document.getElementById("gesture").style.display = "flex";
+			document.querySelector(".gesture").style.display = "flex";
 			setTimeout(function(){
-				document.getElementById("gesture").style.display = "none";
-				document.getElementById("ge4").style.display = "none";
+				document.querySelector(".gesture").style.display = "none";
+				document.querySelector(".ge4").style.display = "none";
 				val = "PIERWSZE ZDJĘCIE ZA<br />";
 				document.getElementById("disMess").innerHTML = val;
 				odlicz(window.odliczOD,id);			
@@ -378,10 +369,12 @@
 		gA.classList.add("ga" + id)
 
 		for(x = 0; x <= 3; x++){
-			document.getElementById("ge"+x).style.display = "none";
+			console.log(x)
+			const el = document.querySelector(".ga" + x)
+			if(el){ el.style.display = "none" }
 		}
 		if(id < 4){
-			document.getElementById("ge"+id).style.display = "block";
+			document.querySelector(".ga" + id).style.display = "block";
 		}
 	}
 	function fade(element) {
@@ -443,7 +436,7 @@
 		window.stoptimer = 1;
 	}
 	function skonczGest(){
-		document.getElementById("gesture").style.display = "none";
+		document.querySelector(".gesture").style.display = "none";
 		clearInterval(liczGest);		
 	}
 	function faceRec(){
