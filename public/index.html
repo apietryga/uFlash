@@ -547,11 +547,6 @@
 </script>
 
 <script>
-// debug development
-// displayScreen(1, 0)
-// newGesture(2)
-// newGesture(0)
-
 if(location.search == "?dev=on" ){
 	console.log("devetopment mode")
 	document.querySelector(".camDIVWrapper").style.zIndex = 7;
@@ -560,65 +555,14 @@ if(location.search == "?dev=on" ){
 }
 
 const webcam = {
-	takePhoto(){
-		// const img = new Image();
-		const img = document.createElement("img");
-		const canvas = document.getElementById("canvas-source");
-		const dataURL = canvas.toDataURL("image/png");
-		img.src = dataURL
-		document.body.append(img)
-		return img
-	},
 	async uploadPhoto(){
-
-		// const form = document.querySelector("#uploadform")
-		// console.log({ form })
-
-
-		// // upload by axios to /api/capture
-		// const imagefile = await webcam.takePhoto();
-		// // const formdata = new FormData();
-		// // formdata.append("img", img.src);
-		// // // let res = await axios.get(base_url + "/api/capture", "elo")
-		// // let res = await axios.post(base_url + "/api/capture", formdata)
-		// // // .then(function (response) {
-		// // console.log({ res });
-		// // })
-		// console.log({ imagefile })
-		// // imagefile.onLoad = function(){
-		// imagefile.addEventListener('load', () => {
-		// 	console.log("img loaded")
-		// 	var formData = new FormData();
-		// 	// var imagefile = document.querySelector('#file');
-		// 	formData.append("image", imagefile.files[0]);
-		// 	axios.post('/capture', formData, {
-		// 			headers: {
-		// 				'Content-Type': 'multipart/form-data'
-		// 			}
-		// 	})
-		// })
-
 		const canvas = document.getElementById('canvas-source');
 		canvas.toBlob(function(blob) {
 			const formData = new FormData();
 			formData.append('file', blob, 'filename.png');
-
-			// Post via axios or other transport method
-			// axios.post('/api/upload', formData);
-			axios.post(base_url + '/api/capture', formData, 
-			 {
-					headers: {
-						'Content-Type': 'multipart/form-data'
-					}
-			}
-			
-			);
+			axios.post( base_url + '/api/capture', formData, { headers: { 'Content-Type': 'multipart/form-data' }});
 		});
-
 	}
-
 }
-
 </script>
-
 </html>

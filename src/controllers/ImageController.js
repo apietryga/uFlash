@@ -39,45 +39,15 @@ module.exports = new class ImageController {
    * @param {Object} res - Response object
    * @returns {Object} - Returns a JSON object
    */
-  capturePOST (
-    
-    req, res) {
-    // console.log({ req })
+  capturePOST ( req, res) {
     const tempPath = req.file.path;
-
-    // fs create folder if not exist
-    // const dir = './uploads/';
     const dir = path.join(__dirname, "../../storage");
     if (!fs.existsSync(dir)){ fs.mkdirSync(dir) }
 
-
-    // const targetPath = path.join(__dirname, "./uploads/image.png");
     const targetPath = dir + "/img_"+ fs.readdirSync(dir).length +".png";
-
-    // if (path.extname(req.file.originalname).toLowerCase() === ".png") {
-      fs.rename(tempPath, targetPath, err => {
-        // if (err) return handleError(err, res);
-        if (err) return res.json({ err });
-        res.json({ "success": true })
-          // .status(200)
-          // .contentType("text/plain")
-          // .end("File uploaded!");
-      });
-    // } else {
-    //   fs.unlink(tempPath, err => {
-    //     if (err) return handleError(err, res);
-
-    //     res
-    //       .status(403)
-    //       .contentType("text/plain")
-    //       .end("Only .png files are allowed!");
-    //   });
-    // }
-//   }
-// );
-    
-
-   
-    // res.json({ "test": true })
+    fs.rename(tempPath, targetPath, err => {
+      if (err) return res.json({ err });
+      res.json({ "success": true })
+    });
   }
 }
