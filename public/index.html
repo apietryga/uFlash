@@ -67,6 +67,12 @@
 			<button onclick="newGesture(2)">B2</button>
 			<button onclick="newGesture(3)">B3</button>
 			<button onclick="newGesture(4)">B4</button>
+			<button onclick="webcam.uploadPhoto()">UPLOAD IMAGE</button>
+			<form id="uploadform" method="post" enctype="multipart/form-data" action="http://localhost:3000/api/capture">
+    <input type="file" name="file">
+    <input type="submit" value="Submit">
+</form>
+
 		</div>
 
 
@@ -142,7 +148,8 @@
 	window.allowScreen6 = false;
 	const ge0 = document.querySelector(".ge0");
 	const ge4 = document.querySelector(".ge4");
-
+	const gestureWrapper = document.querySelector(".gestureWrapper")
+	const loader = document.querySelector("#loader");
 
 	function displayScreen(id,x = 0){
 		console.log("SCREEN ID: "+id);
@@ -152,16 +159,16 @@
 			newGesture(0);
 		}
 		if(id == 1){
-			document.querySelector(".gestureWrapper").style.opacity = 0;
-			document.getElementById("loader").style.animation = "rotate 2s linear infinite";
+			gestureWrapper.style.opacity = 0;
+			loader.style.animation = "rotate 2s linear infinite";
 
 			ledON();
 
 			// document.querySelector(".ge4").style.display = "block";
 			if(ge4){ ge4.style.display = "block" }
-			document.querySelector(".gesture").style.display = "flex";
+			// document.querySelector(".gesture").style.display = "flex";
 			setTimeout(function(){
-				document.querySelector(".gesture").style.display = "none";
+				// document.querySelector(".gesture").style.display = "none";
 				// document.querySelector(".ge4").style.display = "none";
 				if(ge4){ ge4.style.display = "none" }
 				val = "PIERWSZE ZDJĘCIE ZA<br />";
@@ -227,7 +234,8 @@
 	async function capture(id){
 		// document.getElementById("loader").style.display = "block";
 		// console.log("animation  on")
-		document.getElementById("loader").style.animation = "rotate 2s linear infinite";
+		// document.getElementById("loader").style.animation = "rotate 2s linear infinite";
+		loader.style.animation = "rotate 2s linear infinite";
 		var t0 = performance.now();
 
 		// let result = await axios.get('inc/php/functions.php?capture=true')
@@ -239,7 +247,8 @@
 		// xhttp.onreadystatechange = function() {
 			// if (this.readyState == 4 && this.status == 200) {				
 				var t1 = performance.now();
-				document.getElementById("loader").style.animation = "";
+				// document.getElementById("loader").style.animation = "";
+				loader.style.animation = "";
 				console.log("animation  ff")
 				// document.getElementById("loader").style.display = "none";
 
@@ -550,7 +559,29 @@ if(location.search == "?dev=on" ){
 
 }
 
+const webcam = {
+	takePhoto(){
+		const img = new Image();
+		const canvas = document.getElementById("canvas-source");
+		const dataURL = canvas.toDataURL("image/png");
+		img.src = dataURL
+		return img
+	},
+	async uploadPhoto(){
+		// upload by axios to /api/capture
+		const img = webcam.takePhoto();
+		const formdata = new FormData();
+		formdata.append("img", img.src);
+		// let res = await axios.get(base_url + "/api/capture", "elo")
+		let res = await axios.post(base_url + "/api/capture", formdata)
+		// .then(function (response) {
+		console.log({ res });
+		// })
 
+	}
+
+}
 
 </script>
+
 </html>
