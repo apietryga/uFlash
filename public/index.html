@@ -1,47 +1,54 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<script>
+			let base_url = "http://localhost:3000"
+
+		</script>
 		<meta charset="utf-8">
 		<title>uFlash v.1.0</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link rel="stylesheet" href="inc/styles/main.css"/>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.4/axios.min.js"></script>
 	</head>
 	<body>
-		<div class="loader">
-		<!-- <center id="loader"> -->
-			<img class="loader_img"  src='inc/img/loader.gif' loop=infinite />
-		<!-- </center> -->
-		</div>
+		<!-- <div class="loader">
+			<center id="loader">
+				<img class="loader_img"  src='inc/img/loader.gif' loop=infinite />
+			</center>
+		</div> -->
 		<!--
 		<div style="z-index:6;position:fixed;" onclick="gestDone()">GEST</div>
 		-->
 		<!-- GESTURES -->
-		<div class="gestureWrapper">
-			<div class="gesture">
+		<div class="stageWrapper">
+			<div class="gestureWrapper">
+				<div class="gesture">
+						<?xml version="1.0" encoding="UTF-8"?>
+						<svg width="130mm" height="150mm" version="1.1" 
+							viewBox="0 0 130 150" xml:space="preserve" xmlns="http://www.w3.org/2000/svg">
+							<g transform="translate(-54.219 -9.501)">
+								<path d="m77.326 23.072c0.38645 59.796-8.1062 117.88 42.788 117.88 49.069 0 40.97-57.51 40.97-117.88" 
+									stroke="var(--light-secondary)" stroke-linejoin="round" stroke-width="15" fill="none"
+									fill="none" stroke-linejoin="round" 
+								/>
+							</g>
+						</svg>
+				</div>
+				<div class="gesture">
 					<?xml version="1.0" encoding="UTF-8"?>
 					<svg width="130mm" height="150mm" version="1.1" 
 						viewBox="0 0 130 150" xml:space="preserve" xmlns="http://www.w3.org/2000/svg">
 						<g transform="translate(-54.219 -9.501)">
 							<path d="m77.326 23.072c0.38645 59.796-8.1062 117.88 42.788 117.88 49.069 0 40.97-57.51 40.97-117.88" 
-								stroke="var(--light-secondary)" stroke-linejoin="round" stroke-width="15" fill="none"
- 								fill="none" stroke-linejoin="round" 
+								fill="none" stroke-linejoin="round" class="gestureAnimation"
+								stroke="var(--light)" stroke-linejoin="round" stroke-width="15" fill="none"
 							/>
 						</g>
 					</svg>
+				</div>
 			</div>
-			<div class="gesture">
-				<?xml version="1.0" encoding="UTF-8"?>
-				<svg width="130mm" height="150mm" version="1.1" 
-					viewBox="0 0 130 150" xml:space="preserve" xmlns="http://www.w3.org/2000/svg">
-					<g transform="translate(-54.219 -9.501)">
-						<path d="m77.326 23.072c0.38645 59.796-8.1062 117.88 42.788 117.88 49.069 0 40.97-57.51 40.97-117.88" 
-							fill="none" stroke-linejoin="round" class="gestureAnimation"
-							stroke="var(--light)" stroke-linejoin="round" stroke-width="15" fill="none"
-						/>
-					</g>
-				</svg>
-			</div>
-			<div class="gesture logo">
+			<div id="loader">
 				<?xml version="1.0" encoding="UTF-8"?>
 				<svg width="26.147mm" height="26.396mm" version="1.1" viewBox="0 0 26.147 26.396"
 					xml:space="preserve" xmlns="http://www.w3.org/2000/svg">
@@ -52,6 +59,8 @@
 				</svg>
 			</div>
 		</div>
+
+
 		<div class="btns">
 			<button onclick="newGesture(0)">B0</button>
 			<button onclick="newGesture(1)">B1</button>
@@ -78,20 +87,35 @@
 		<div id="dodruk"></div>
 		<div id="gestVal" style="color:#fff;position:absolute;top:0;left:0;font-size:10em;z-index:2;"></div>
 		<div id="gestVal2" style="color:#fff;position:absolute;top:100px;left:0;font-size:10em;z-index:2;"></div>
-		<div class="camDIV">
-			<div id="message">Ładowanie ... </div>
-			<video id="webcam" autoplay width="640" height="480"></video>
-			<canvas id="canvas-source" width="640" height="480" style="margin-top: 12%; margin-left: 25%; border: 4px solid #999; padding: 2px;"></canvas>
-			<canvas id="canvas-blended" width="640" height="480"></canvas>
-			<div id="buttons"  style="margin-top: 12%; margin-left: 25%; border: none;">
-				<div id="front">
-					<img id="button0" src="inc/img/gesture/b1.png"/>
-					<img id="button1" src="inc/img/gesture/b2.png"/>
-					<img id="button2" src="inc/img/gesture/b4.png"/>
-					<img id="button3" src="inc/img/gesture/b.png"/>
+
+		<div class="camDIVWrapper">
+			<div class="camDIV">
+				<div id="message">Ładowanie ... </div>
+				<video id="webcam" autoplay width="640" height="480"></video>
+				<!-- <canvas id="canvas-source" width="640" height="480" style="margin-top: 12%; margin-left: 25%; border: 4px solid #999; padding: 2px;"></canvas> -->
+				<canvas id="canvas-source" width="640" height="480"></canvas>
+				<canvas id="canvas-blended" width="640" height="480"></canvas>
+				<!-- <div id="buttons"  style="margin-top: 12%; margin-left: 25%; border: none;"> -->
+				<div id="buttons">
+					<div id="front">
+						<!-- <img id="button0" src="inc/img/gesture/b.webp" />
+						<img id="button1" src="inc/img/gesture/b.webp" />
+						<img id="button2" src="inc/img/gesture/b.webp" />
+						<img id="button3" src="inc/img/gesture/b.webp" /> -->
+						<img id="button0" src="inc/img/gesture/b1.png"/>
+						<img id="button1" src="inc/img/gesture/b2.png"/>
+						<img id="button2" src="inc/img/gesture/b4.png"/>
+						<img id="button3" src="inc/img/gesture/b.png"/>
+						<!-- <div id="button0" class="button">1</div>
+						<div id="button1" class="button">2</div>
+						<div id="button2" class="button">3</div>
+						<div id="button3" class="button">4</div> -->
+					</div>
 				</div>
 			</div>
 		</div>
+
+
 		<div class="results">
 		</div>
 		<!-- do renderów -->
@@ -116,21 +140,30 @@
 	window.nrofpic = 0;	
 	window.kolejkaDruku = 0;
 	window.allowScreen6 = false;
+	const ge0 = document.querySelector(".ge0");
+	const ge4 = document.querySelector(".ge4");
+
+
 	function displayScreen(id,x = 0){
 		console.log("SCREEN ID: "+id);
 		val = "";
 		if(id == 0){
-			document.querySelector(".gesture").style.display = "flex";
-			document.querySelector(".ge0").style.display = "block";
+			if(ge0){ ge0.style.display = "block" }
 			newGesture(0);
 		}
 		if(id == 1){
+			document.querySelector(".gestureWrapper").style.opacity = 0;
+			document.getElementById("loader").style.animation = "rotate 2s linear infinite";
+
 			ledON();
-			document.getElementById("ge4").style.display = "block";
+
+			// document.querySelector(".ge4").style.display = "block";
+			if(ge4){ ge4.style.display = "block" }
 			document.querySelector(".gesture").style.display = "flex";
 			setTimeout(function(){
 				document.querySelector(".gesture").style.display = "none";
-				document.querySelector(".ge4").style.display = "none";
+				// document.querySelector(".ge4").style.display = "none";
+				if(ge4){ ge4.style.display = "none" }
 				val = "PIERWSZE ZDJĘCIE ZA<br />";
 				document.getElementById("disMess").innerHTML = val;
 				odlicz(window.odliczOD,id);			
@@ -191,21 +224,32 @@
 			}); 
 		}
 	}
-	function capture(id){
-		document.getElementById("loader").style.display = "block";
+	async function capture(id){
+		// document.getElementById("loader").style.display = "block";
+		// console.log("animation  on")
+		document.getElementById("loader").style.animation = "rotate 2s linear infinite";
 		var t0 = performance.now();
-		var xhttp = new XMLHttpRequest();
-		xhttp.onreadystatechange = function() {
-			if (this.readyState == 4 && this.status == 200) {				
+
+		// let result = await axios.get('inc/php/functions.php?capture=true')
+		let result = await axios.get(base_url + '/api/capture')
+
+		console.log({ result })
+
+		// var xhttp = new XMLHttpRequest();
+		// xhttp.onreadystatechange = function() {
+			// if (this.readyState == 4 && this.status == 200) {				
 				var t1 = performance.now();
-				document.getElementById("loader").style.display = "none";
+				document.getElementById("loader").style.animation = "";
+				console.log("animation  ff")
+				// document.getElementById("loader").style.display = "none";
+
 				window.lastCaptured = this.responseText;
 				console.log("CAPTURE TIME: " + Math.round(((t1 - t0)/1000)*100)/100 + " SEC");
 				displayScreen(id+1);
-			}
-		};
-	  xhttp.open("GET", "inc/php/functions.php?capture=true", true);
-	  xhttp.send();
+			// }
+		// };
+	  // xhttp.open("GET", "inc/php/functions.php?capture=true", true);
+	  // xhttp.send();
 	}
 	function setPhoto(_callback){
 	  var xhttp = new XMLHttpRequest();
@@ -369,7 +413,6 @@
 		gA.classList.add("ga" + id)
 
 		for(x = 0; x <= 3; x++){
-			console.log(x)
 			const el = document.querySelector(".ga" + x)
 			if(el){ el.style.display = "none" }
 		}
@@ -498,7 +541,15 @@
 // debug development
 // displayScreen(1, 0)
 // newGesture(2)
-newGesture(0)
+// newGesture(0)
+
+if(location.search == "?dev=on" ){
+	console.log("devetopment mode")
+	document.querySelector(".camDIVWrapper").style.zIndex = 7;
+	document.querySelector(".btns").style.display = "flex";
+
+}
+
 
 
 </script>
