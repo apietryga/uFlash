@@ -26,6 +26,7 @@ body {
 	width:640px;
 	height:480px;
 	position: relative;
+	border:2px solid #fff;
 }
 .camDIV #webcam {
 	display:none;
@@ -100,11 +101,12 @@ body {
 	vertical-align:middle;
 	color:#fff;
 	font-size:5em;
-	z-index:4;
+	z-index:6;
 	left:0;
 	top:0;
 	opacity:1;
-	display:none;
+	pointer-events: none;
+	/* display:none; */
 }
 #gesture{
 	align-items: center;
