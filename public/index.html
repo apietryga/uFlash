@@ -163,13 +163,13 @@
 	// function displayScreen(id,x = 0){
 	const displayScreen = async ( id, x = 0 ) => {
 		console.log("SCREEN ID: "+id);
-		val = "";
+		// let val = "";
 		if(id == 0){
 			if(ge0){ ge0.style.display = "block" }
 			newGesture(0);
 		}
-		// if(id == 1){
 		if([1, 2, 3].includes( id )){
+		// if(id == 1){
 			gestureWrapper.style.opacity = 0;
 			loader.style.animation = "rotate 2s linear infinite";
 			ledON();
@@ -185,10 +185,11 @@
 				const names = ["NAMES:", "PIERWSZE", "DRUGIE", "TRZECIE"]
 
 				// val = "PIERWSZE ZDJĘCIE ZA<br />"
-				const val = names[id] + " ZDJĘCIE ZA<br />"
+				// val = names[id] + " ZDJĘCIE ZA<br />"
 
 				for(let i = countFrom; i > 0; i--){
-					message.innerHTML = val + i;
+					// message.innerHTML = val + i;
+					message.innerHTML = names[id] + " ZDJĘCIE ZA<br />" + i;
 					await common.wait(1);
 				}
 				// message.innerHTML = val + 3;
@@ -204,7 +205,7 @@
 				// odlicz(window.odliczOD,id);
 			// }, 1000);
 			
-		}
+		// }
 		// if(id == 2){
 		// 	document.getElementById("countP").innerHTML = "";
 		// 	val = "DRUGIE ZDJĘCIE ZA";
@@ -214,11 +215,13 @@
 		// 	document.getElementById("countP").innerHTML = "";
 		// 	val = "OSTATNIE ZDJĘCIE ZA";
 		// 	odlicz(window.odliczOD,id);
-		// }
+		}
 		if(id == 4){
 			ledOFF();
 			document.getElementById("countP").innerHTML = "";
-			val += "LICZĘ OSOBY NA ZDJĘCIU";
+			// val += "LICZĘ OSOBY NA ZDJĘCIU";
+			// message.innerHTML = val;
+			message.innerHTML = "LICZĘ OSOBY NA ZDJĘCIU";
 			console.log("PREPARING PHOTO TEMPLATE");
 			// src = "inc/img/captured_small/small_"+window.lastCaptured;
 			// src = "inc/img/captured_small/small_" + lastCaptured;
@@ -235,19 +238,7 @@
 			// 	});
 			// });
 		}
-		if(id == 6){
-			val += "ODBIERZ ZDJĘCIA";	
-			odbior = setTimeout(function(){
-				window.RobieFoto = 0;
-				displayScreen(0);
-				checkGest(0);
-				clearTimeout(odbior);
-				var liczGest = setInterval(myTimer, 1000);				
-			},5000)
-		}
-		if(id != 5){
-			document.getElementById("disMess").innerHTML = val;
-		}else{
+		if(id == 5){
 			checkPrint(function() {
 				if(window.kolejkaDruku == 0 && window.allowScreen6 == true){
 					window.allowScreen6 = false;
@@ -260,6 +251,20 @@
 				}
 			}); 
 		}
+		if(id == 6){
+			// val += "ODBIERZ ZDJĘCIA";	
+			message.innerHTML = "ODBIERZ ZDJĘCIA";
+			odbior = setTimeout(function(){
+				window.RobieFoto = 0;
+				displayScreen(0);
+				checkGest(0);
+				clearTimeout(odbior);
+				var liczGest = setInterval(myTimer, 1000);				
+			},5000)
+		}
+		// if(id != 5){
+			// document.getElementById("disMess").innerHTML = val;
+		// }else{
 	}
 	async function capture(id){
 		// document.getElementById("loader").style.display = "block";
