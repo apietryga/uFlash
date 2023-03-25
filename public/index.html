@@ -60,23 +60,21 @@
 			</div>
 		</div>
 
-
+		<!-- DEVELOPMENT -->
 		<div class="btns">
 			<button onclick="newGesture(0)">B0</button>
 			<button onclick="newGesture(1)">B1</button>
 			<button onclick="newGesture(2)">B2</button>
 			<button onclick="newGesture(3)">B3</button>
 			<button onclick="newGesture(4)">B4</button>
+			<button onclick="gestDone()">GESTURE</button>
 			<button onclick="webcam.uploadPhoto()">UPLOAD IMAGE</button>
-			<form id="uploadform" method="post" enctype="multipart/form-data" action="http://localhost:3000/api/capture">
-    <input type="file" name="file">
-    <input type="submit" value="Submit">
-</form>
-
+			<!-- <form id="uploadform" method="post" enctype="multipart/form-data" action="http://localhost:3000/api/capture">
+				<input type="file" name="file">
+				<input type="submit" value="Submit">
+			</form> -->
 		</div>
 
-
-	<!-- END OF GESTURES -->
 		<table id="mainscene">
 			<tr>
 				<td class="mainsceneTD">
@@ -88,6 +86,7 @@
 				<td id="odliczField"></td>
 			</tr>
 		</table>
+
 	<!-- FUNKCYJNE -->
 		<div id="plotter"></div>
 		<div id="dodruk"></div>
@@ -129,6 +128,8 @@
 		<!-- end of do renderów -->	
 	<!-- END OF FUNKCYJNE -->
 	</body>
+
+<!-- TODO: Bring it to header -->
 <script src="inc/js/jquery.js"></script>
 <script src="inc/js/buffer-loader.js"></script>
 <script src="inc/js/html2canvas.js"></script>
@@ -150,6 +151,8 @@
 	const ge4 = document.querySelector(".ge4");
 	const gestureWrapper = document.querySelector(".gestureWrapper")
 	const loader = document.querySelector("#loader");
+	// let lastCaptured
+	const lastCaptured = 
 
 	function displayScreen(id,x = 0){
 		console.log("SCREEN ID: "+id);
@@ -192,7 +195,8 @@
 			document.getElementById("countP").innerHTML = "";
 			val += "LICZĘ OSOBY NA ZDJĘCIU";
 			console.log("PREPARING PHOTO TEMPLATE");
-			src = "inc/img/captured_small/small_"+window.lastCaptured;
+			// src = "inc/img/captured_small/small_"+window.lastCaptured;
+			src = "inc/img/captured_small/small_" + lastCaptured;
 			console.log("IMG SRC: "+src);
 			fDetect(src,function(){
 				setPhoto(function(){
@@ -497,12 +501,12 @@
 	window.onload = start_media();
 	displayScreen(0);
 	// development
-	function gestDone(){
-		window.stoptimer = 1;
-		window.RobieFoto = 0;
-		window.gestNote = 3;
-		checkGest(3);
-	}
+	// function gestDone(){
+	// 	window.stoptimer = 1;
+	// 	window.RobieFoto = 0;
+	// 	window.gestNote = 3;
+	// 	checkGest(3);
+	// }
 	// end of development
 	// wykrywanie twarzy
 	function renderImg(src,_callback){
@@ -547,12 +551,22 @@
 </script>
 
 <script>
+// DEVELOPMENT
 if(location.search == "?dev=on" ){
 	console.log("devetopment mode")
 	document.querySelector(".camDIVWrapper").style.zIndex = 7;
 	document.querySelector(".btns").style.display = "flex";
-
 }
+// function gestDone(){
+const gestDone = () =>{
+	window.stoptimer = 1;
+	window.RobieFoto = 0;
+	window.gestNote = 3;
+	checkGest(3);
+}
+
+
+
 
 const webcam = {
 	async uploadPhoto(){
