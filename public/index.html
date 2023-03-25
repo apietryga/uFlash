@@ -137,9 +137,11 @@
 <script src="inc/js/face_recognition.js"></script>
 
 <script>
-	window.odliczOD = 10; // ODLICZANIE SEC. 
+	// window.odliczOD = 10; // ODLICZANIE SEC. 
+	// window.odliczOD = 3; // ODLICZANIE SEC. 
 	/* ^^poprawić na 10*/
-	window.fotaPO = 5; // PO ILU MA WEJŚĆ CAPTURE SEC
+	// window.fotaPO = 5; // PO ILU MA WEJŚĆ CAPTURE SEC
+	// window.fotaPO = 0; // PO ILU MA WEJŚĆ CAPTURE SEC
 	/* ^^poprawić na 5*/
 	window.RobieFoto = 0; // app.js
 	window.lastCaptured = 0;
@@ -147,67 +149,91 @@
 	window.nrofpic = 0;	
 	window.kolejkaDruku = 0;
 	window.allowScreen6 = false;
+
+
 	const ge0 = document.querySelector(".ge0");
 	const ge4 = document.querySelector(".ge4");
 	const gestureWrapper = document.querySelector(".gestureWrapper")
-	const loader = document.querySelector("#loader");
+	const loader = document.querySelector("#loader")
+	const message = document.getElementById("disMess")
+	const countFrom = 5
 	// let lastCaptured
-	const lastCaptured = 
+	// const lastCaptured = 
 
-	function displayScreen(id,x = 0){
+	// function displayScreen(id,x = 0){
+	const displayScreen = async ( id, x = 0 ) => {
 		console.log("SCREEN ID: "+id);
 		val = "";
 		if(id == 0){
 			if(ge0){ ge0.style.display = "block" }
 			newGesture(0);
 		}
-		if(id == 1){
+		// if(id == 1){
+		if([1, 2, 3].includes( id )){
 			gestureWrapper.style.opacity = 0;
 			loader.style.animation = "rotate 2s linear infinite";
-
 			ledON();
-
 			// document.querySelector(".ge4").style.display = "block";
-			if(ge4){ ge4.style.display = "block" }
+			// if(ge4){ ge4.style.display = "block" }
 			// document.querySelector(".gesture").style.display = "flex";
-			setTimeout(function(){
+			// setTimeout(function(){
+			// setTimeout( async () => {
 				// document.querySelector(".gesture").style.display = "none";
 				// document.querySelector(".ge4").style.display = "none";
-				if(ge4){ ge4.style.display = "none" }
-				val = "PIERWSZE ZDJĘCIE ZA<br />";
-				document.getElementById("disMess").innerHTML = val;
-				odlicz(window.odliczOD,id);			
-			},1000);
+				// if(ge4){ ge4.style.display = "none" }
+				// console.log('wairting 3 sec')
+				const names = ["NAMES:", "PIERWSZE", "DRUGIE", "TRZECIE"]
+
+				// val = "PIERWSZE ZDJĘCIE ZA<br />"
+				const val = names[id] + " ZDJĘCIE ZA<br />"
+
+				for(let i = countFrom; i > 0; i--){
+					message.innerHTML = val + i;
+					await common.wait(1);
+				}
+				// message.innerHTML = val + 3;
+				// await common.wait(1);
+				// message.innerHTML = val + 2;
+				// await common.wait(1);
+				// message.innerHTML = val + 1;
+				// await common.wait(1);
+				webcam.uploadPhoto()
+				displayScreen(id + 1)
+				// document.getElementById("disMess").innerHTML = val;
+				// console.log('wairting end')
+				// odlicz(window.odliczOD,id);
+			// }, 1000);
 			
 		}
-		if(id == 2){
-			document.getElementById("countP").innerHTML = "";
-			val = "DRUGIE ZDJĘCIE ZA";
-			odlicz(window.odliczOD,id);
-		}
-		if(id == 3){
-			document.getElementById("countP").innerHTML = "";
-			val = "OSTATNIE ZDJĘCIE ZA";
-			odlicz(window.odliczOD,id);
-		}
+		// if(id == 2){
+		// 	document.getElementById("countP").innerHTML = "";
+		// 	val = "DRUGIE ZDJĘCIE ZA";
+		// 	odlicz(window.odliczOD,id);
+		// }
+		// if(id == 3){
+		// 	document.getElementById("countP").innerHTML = "";
+		// 	val = "OSTATNIE ZDJĘCIE ZA";
+		// 	odlicz(window.odliczOD,id);
+		// }
 		if(id == 4){
 			ledOFF();
 			document.getElementById("countP").innerHTML = "";
 			val += "LICZĘ OSOBY NA ZDJĘCIU";
 			console.log("PREPARING PHOTO TEMPLATE");
 			// src = "inc/img/captured_small/small_"+window.lastCaptured;
-			src = "inc/img/captured_small/small_" + lastCaptured;
-			console.log("IMG SRC: "+src);
-			fDetect(src,function(){
-				setPhoto(function(){
-					renderPicture(function() {
-						for(x = 0; x < window.osoby; x++){
-							drukuj();
-						}
-						displayScreen(5);
-					});
-				});
-			});
+			// src = "inc/img/captured_small/small_" + lastCaptured;
+			// console.log("IMG SRC: "+src);
+			// fDetect(src,function(){
+			// fDetect("",function(){
+			// 	setPhoto(function(){
+			// 		renderPicture(function() {
+			// 			for(x = 0; x < window.osoby; x++){
+			// 				drukuj();
+			// 			}
+			// 			displayScreen(5);
+			// 		});
+			// 	});
+			// });
 		}
 		if(id == 6){
 			val += "ODBIERZ ZDJĘCIA";	
@@ -243,7 +269,9 @@
 		var t0 = performance.now();
 
 		// let result = await axios.get('inc/php/functions.php?capture=true')
-		let result = await axios.get(base_url + '/api/capture')
+		// let result = await axios.get(base_url + '/api/capture')
+
+		let result = webcam.uploadPhoto();
 
 		console.log({ result })
 
@@ -543,7 +571,7 @@
 	function fDetect(src,_callback){
 		renderImg(src,function(){
 			facedetection(function(){
-				console.log("DETECT "+window.osoby+" PERSON/S");
+				console.log("DETECT "+window.osoby+" PEOPLES");
 				_callback();
 			});
 		});
@@ -577,6 +605,13 @@ const webcam = {
 			axios.post( base_url + '/api/capture', formData, { headers: { 'Content-Type': 'multipart/form-data' }});
 		});
 	}
+}
+
+const common = {
+	async wait(seconds) {
+		return new Promise(resolve => setTimeout(resolve, seconds * 1000));
+	},
+
 }
 </script>
 </html>
