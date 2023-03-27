@@ -127,12 +127,12 @@
 		$rotate = imagerotate($source, $degrees, 0);
 		imagejpeg($rotate, "../img/results/forprinter.jpg",100);
 	}
-	if(isset($_GET['led'])){
-		$ac = $_GET['led'];
-		if($ac == "on"){
-			exec('c:\WINDOWS\system32\cmd.exe /c C:\xampp\htdocs\inc\bat\led_on.bat');
-		}elseif($ac == "off"){
-			exec('c:\WINDOWS\system32\cmd.exe /c C:\xampp\htdocs\inc\bat\led_off.bat');
-		}
-	}
+	// if(isset($_GET['led'])){
+	// 	$ac = $_GET['led'];
+	// 	if($ac == "on"){
+	// 		exec('c:\WINDOWS\system32\cmd.exe /c C:\xampp\htdocs\inc\bat\led_on.bat');
+	// 	}elseif($ac == "off"){
+	// 		exec('c:\WINDOWS\system32\cmd.exe /c C:\xampp\htdocs\inc\bat\led_off.bat');
+	// 	}
+	// }
 ?>
