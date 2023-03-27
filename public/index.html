@@ -156,7 +156,7 @@
 
 
 	// const ge0 = document.querySelector(".ge0");
-	const ge4 = document.querySelector(".ge4");
+	// const ge4 = document.querySelector(".ge4");
 	const gestureWrapper = document.querySelector(".gestureWrapper")
 	const loader = document.querySelector("#loader")
 	const message = document.getElementById("disMess")
@@ -166,18 +166,21 @@
 
 	// function displayScreen(id,x = 0){
 	const displayScreen = async ( id, x = 0 ) => {
-		console.log("SCREEN ID: "+id);
+		// console.log("SCREEN ID: "+id);
+		console.log({ STAGE: id, x });
 		// let val = "";
 		if(id == 0){
 			// if(ge0){ ge0.style.display = "block" }
 			newGesture(0);
 		}
-		if([1, 2, 3].includes( id )){
-		// if(id == 1){
+		if(id == 1){
 			gestureWrapper.style.opacity = 0;
 			loader.style.animation = "rotate 2s linear infinite";
-			// ledON();
 			await controller.leds.on()
+		}
+		if([1, 2, 3].includes( id )){
+		// if(id == 1){
+			// ledON();
 			// document.querySelector(".ge4").style.display = "block";
 			// if(ge4){ ge4.style.display = "block" }
 			// document.querySelector(".gesture").style.display = "flex";
@@ -203,7 +206,7 @@
 				// await common.wait(1);
 				// message.innerHTML = val + 1;
 				// await common.wait(1);
-				controller.webcam.uploadPhoto()
+				await controller.webcam.uploadPhoto()
 				displayScreen(id + 1)
 				// document.getElementById("disMess").innerHTML = val;
 				// console.log('wairting end')
@@ -224,10 +227,12 @@
 		if(id == 4){
 			// ledOFF();
 			await controller.leds.off()
-			document.getElementById("countP").innerHTML = "";
+			// document.getElementById("countP").innerHTML = "";
 			// val += "LICZĘ OSOBY NA ZDJĘCIU";
 			// message.innerHTML = val;
+			await controller.faceDetection()
 			message.innerHTML = "LICZĘ OSOBY NA ZDJĘCIU";
+
 			console.log("PREPARING PHOTO TEMPLATE");
 			// src = "inc/img/captured_small/small_"+window.lastCaptured;
 			// src = "inc/img/captured_small/small_" + lastCaptured;
@@ -592,7 +597,7 @@
 <script>
 // DEVELOPMENT
 if(location.search == "?dev=on" ){
-	console.log("devetopment mode")
+	console.log({ mode : "development" })
 	document.querySelector(".camDIVWrapper").style.zIndex = 7;
 	document.querySelector(".btns").style.display = "flex";
 }
@@ -606,17 +611,6 @@ const gestDone = () =>{
 
 
 
-
-// const webcam = {
-// 	async uploadPhoto(){
-// 		const canvas = document.getElementById('canvas-source');
-// 		canvas.toBlob(function(blob) {
-// 			const formData = new FormData();
-// 			formData.append('file', blob, 'filename.png');
-// 			axios.post( base_url + '/api/capture', formData, { headers: { 'Content-Type': 'multipart/form-data' }});
-// 		});
-// 	}
-// }
 
 const common = {
 	async wait(seconds) {
@@ -638,12 +632,19 @@ const controller = {
 	},
 	webcam: {
 		async uploadPhoto(){
-			const canvas = document.getElementById('canvas-source');
-			canvas.toBlob(function(blob) {
-				const formData = new FormData();
-				formData.append('file', blob, 'filename.png');
-				axios.post( base_url + '/api/capture', formData, { headers: { 'Content-Type': 'multipart/form-data' }});
-			});
+			// return await canvas.toBlob( async blob => {
+			return new Promise( res => {
+				const canvas = document.getElementById('canvas-source');
+				canvas.toBlob( async blob => {
+					const formData = new FormData();
+					formData.append('file', blob, 'filename.png');
+					const { data } = await axios.post( base_url + '/api/capture', formData, { headers: { 'Content-Type': 'multipart/form-data' }})
+					console.log({ ...data })
+					// return { ...data }
+					return res({ ...data })
+				})
+			})
+
 		}
 	},
 }
