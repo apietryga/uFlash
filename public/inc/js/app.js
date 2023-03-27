@@ -1,4 +1,3 @@
-$("#message").hide();
 var video;
 function hasGetUserMedia(){
 	return !!(navigator.getUserMedia||navigator.webkitGetUserMedia||navigator.mozGetUserMedia||navigator.msGetUserMedia)
@@ -31,8 +30,13 @@ var notesPosX=[170,140,430,400];
 var notesPosY=[100,360,360,130];
 window.notes = notesPosY.length;
 var timeOut,lastImageData;
-var canvasSource=$("#canvas-source")[0];
-var canvasBlended=$("#canvas-blended")[0];
+
+// var canvasSource=$("#canvas-source")[0];
+// var canvasBlended=$("#canvas-blended")[0];
+
+var canvasSource=document.querySelector("#canvas-source");
+var canvasBlended=document.querySelector("#canvas-blended");
+
 var contextSource=canvasSource.getContext("2d");
 var contextBlended=canvasBlended.getContext("2d");
 var soundContext;
@@ -57,7 +61,8 @@ function finishedLoading(A){
 	for(var B=0;B<4;B++){
 		var D=soundContext.createBufferSource();
 		D.buffer=A[B];D.connect(soundContext.destination);
-		var C={note:D,ready:true,visual:$("#button"+B)[0]};
+		// var C={note:D,ready:true,visual:$("#button"+B)[0]};
+		var C={note:D,ready:true,visual:document.querySelector("#button"+B)};
 		C.area={
 			x:notesPosX[B],
 			y:notesPosY[B],
@@ -72,9 +77,14 @@ function setNoteReady(A){
 	A.ready=true
 }
 function start(){
-	$(canvasSource).show();
-	$(canvasBlended).hide();
-	$("#buttons").show();
+	// $(canvasSource).show();
+	// $(canvasBlended).hide();
+	// $("#buttons").show();
+	
+	canvasSource.display="block";
+	canvasBlended.style.display = "none";
+	document.querySelector("#buttons").display="block";
+
 	setTimeout(function(){
 		update()
 	},2000)
@@ -147,8 +157,16 @@ function checkAreas(){
 		}
 		C=Math.round(C/(A.data.length*0.25));
 		if(C>10){
-			notes[D].visual.style.display="block";
-			$(notes[D].visual).fadeOut()
+			// notes[D].visual.style.display="block";
+			// $(notes[D].visual).fadeOut()
+			notes[D].visual.style.display = "none";
+			((visual)=>{
+				setTimeout(()=>{
+					// notes[D].visual.style.display = "block";
+					visual.style.display = "block";
+				},500)
+			})(notes[D].visual)
+
 			checkGest(D);
 		}
 	}

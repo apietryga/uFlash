@@ -6,10 +6,6 @@ const tf = require("@tensorflow/tfjs-node");
 const faceapi = require("@vladmandic/face-api/dist/face-api.node.js");
 const fs = require("fs");
 const modelPathRoot = "./models";
-// const im = require('imagemagick');
-// const resizeImage = require('resize-image');
-//  import {convert} from "easyimage";
-// const { resize } = require("easyimage");
 const sharp = require('sharp');
 
 let optionsSSDMobileNet;
@@ -23,26 +19,25 @@ async function image(file) {
   return result;
 }
 
-async function detect(tensor) {
+async function detectTF(tensor) {
   const result = await faceapi.detectAllFaces(tensor, optionsSSDMobileNet);
   return result;
 }
 
 async function main(file) {
-  console.log("FaceAPI single-process test");
-
+  // console.log("FaceAPI single-process test");
   await faceapi.tf.setBackend("tensorflow");
   await faceapi.tf.enableProdMode();
   await faceapi.tf.ENV.set("DEBUG", false);
   await faceapi.tf.ready();
 
-  console.log(
-    `Version: TensorFlow/JS ${faceapi.tf?.version_core} FaceAPI ${
-      faceapi.version.faceapi
-    } Backend: ${faceapi.tf?.getBackend()}`
-  );
+  // console.log(
+  //   `Version: TensorFlow/JS ${faceapi.tf?.version_core} FaceAPI ${
+  //     faceapi.version.faceapi
+  //   } Backend: ${faceapi.tf?.getBackend()}`
+  // );
 
-  console.log("Loading FaceAPI models");
+  // console.log("Loading FaceAPI models");
   const modelPath = path.join(__dirname, modelPathRoot);
   await faceapi.nets.ssdMobilenetv1.loadFromDisk(modelPath);
   optionsSSDMobileNet = new faceapi.SsdMobilenetv1Options({
@@ -50,8 +45,8 @@ async function main(file) {
   });
 
   const tensor = await image(file);
-  const result = await detect(tensor);
-  console.log("Detected faces:", result.length);
+  const result = await detectTF(tensor);
+  // console.log("Detected faces:", result.length);
 
   tensor.dispose();
 
@@ -60,32 +55,20 @@ async function main(file) {
 
 module.exports = new class FaceRecognitionController{
   async detect( req, res ){
-
-    // const img_path = path.join(__dirname, "../../../storage/img.jpg");
-
-    // get last image from dir 
     const dir = path.join(__dirname, "../../../storage");
     const files = fs.readdirSync(dir);
-    const last_file = files[files.length - 1];
+    const file_numbers = files.map( file => file.split("_")[1].split(".")[0] * 1)
+    file_numbers.sort()
+    const max_file_number = Math.max(...file_numbers)
+    const last_file = "img_" + max_file_number + ".jpg";
     const img_path = path.join(__dirname, "../../../storage", last_file);
+    const resized = await sharp(img_path)
+      .resize(612,408)
+      .jpeg({ mozjpeg: true })
+      .toBuffer()
 
-    // resize to valid buffer
-      const resized = await sharp(img_path)
-        .resize(612,408)
-        .jpeg({ mozjpeg: true })
-        .toBuffer()
+    const faces = await main(resized)
 
-      // const file = fs.readFileSync(img_path);
-      // const file = fs.readFileSync(img_resized_path);
-      // console.log({ file , resized})
-
-      // const response = await main(file)
-      const response = await main(resized)
-      console.log( { response })
-      // res.json({ message: 'faceRecognition: module not tested yet', params })
-      res.json({ message: 'faceRecognition: module testing now', response })
-
-    // });
-
+    res.json({ message: 'faceRecognition: module testing now', faces })
   }
 }

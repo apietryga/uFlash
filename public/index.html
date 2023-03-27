@@ -100,7 +100,7 @@
 
 		<div class="camDIVWrapper">
 			<div class="camDIV">
-				<div id="message">Ładowanie ... </div>
+				<div id="message"></div>
 				<video id="webcam" autoplay width="640" height="480"></video>
 				<!-- <canvas id="canvas-source" width="640" height="480" style="margin-top: 12%; margin-left: 25%; border: 4px solid #999; padding: 2px;"></canvas> -->
 				<canvas id="canvas-source" width="640" height="480"></canvas>
@@ -135,11 +135,12 @@
 	</body>
 
 <!-- TODO: Bring it to header -->
-<script src="inc/js/jquery.js"></script>
+
+<!-- <script src="inc/js/jquery.js"></script> -->
 <script src="inc/js/buffer-loader.js"></script>
-<script src="inc/js/html2canvas.js"></script>
+<!-- <script src="inc/js/html2canvas.js"></script> -->
 <script src="inc/js/app.js"></script>
-<script src="inc/js/face_recognition.js"></script>
+<!-- <script src="inc/js/face_recognition.js"></script> -->
 
 <script>
 	// window.odliczOD = 10; // ODLICZANIE SEC. 
@@ -161,7 +162,7 @@
 	const gestureWrapper = document.querySelector(".gestureWrapper")
 	const loader = document.querySelector("#loader")
 	const message = document.getElementById("disMess")
-	const countFrom = 5
+	let countFrom = 5
 	// let lastCaptured
 	// const lastCaptured = 
 
@@ -232,9 +233,10 @@
 			// val += "LICZĘ OSOBY NA ZDJĘCIU";
 			// message.innerHTML = val;
 			message.innerHTML = "LICZĘ OSOBY NA ZDJĘCIU";
-			const peoples = await controller.faceDetection.detect()
+			const { faces } = await controller.faceDetection.detect()
+			console.log({ faces })
 
-			message.innerHTML = "LICZĘ OSOBY NA ZDJĘCIU (" + peoples + ")";
+			message.innerHTML = "LICZĘ OSOBY NA ZDJĘCIU (" + faces.length + ")";
 			await common.wait(5);
 
 			console.log("PREPARING PHOTO TEMPLATE");
@@ -557,45 +559,45 @@
 	// }
 	// end of development
 	// wykrywanie twarzy
-	function renderImg(src,_callback){
-		var div = document.createElement("div");
-		div.id = "dCoint";
-		div.className = "detect-contrainer";
-		var img = document.createElement("img");
-		img.id = "img";
-		img.src = src;
-		div.appendChild(img);
-		document.body.appendChild(div);
-		setTimeout(function(){
-			_callback();
-		},100)
-	}
-	function facedetection(_callback){
-		window.osoby = 0;
-		var img = document.getElementById('img'); 
-		var tracker = new tracking.LandmarksTracker();
-		tracker.setInitialScale(4);
-		tracker.setStepSize(2);
-		tracker.setEdgesDensity(0.1);
-		tracking.track('#img', tracker);
-		tracker.on('track', function(event) {
-				if(!event.data) return;
-				event.data.faces.forEach(function(rect) {
-				window.osoby++;		
-			});
-		});
-		setTimeout(function(){
-			_callback();
-		},100);
-	}
-	function fDetect(src,_callback){
-		renderImg(src,function(){
-			facedetection(function(){
-				console.log("DETECT "+window.osoby+" PEOPLES");
-				_callback();
-			});
-		});
-	}
+	// function renderImg(src,_callback){
+	// 	var div = document.createElement("div");
+	// 	div.id = "dCoint";
+	// 	div.className = "detect-contrainer";
+	// 	var img = document.createElement("img");
+	// 	img.id = "img";
+	// 	img.src = src;
+	// 	div.appendChild(img);
+	// 	document.body.appendChild(div);
+	// 	setTimeout(function(){
+	// 		_callback();
+	// 	},100)
+	// }
+	// function facedetection(_callback){
+	// 	window.osoby = 0;
+	// 	var img = document.getElementById('img'); 
+	// 	var tracker = new tracking.LandmarksTracker();
+	// 	tracker.setInitialScale(4);
+	// 	tracker.setStepSize(2);
+	// 	tracker.setEdgesDensity(0.1);
+	// 	tracking.track('#img', tracker);
+	// 	tracker.on('track', function(event) {
+	// 			if(!event.data) return;
+	// 			event.data.faces.forEach(function(rect) {
+	// 			window.osoby++;		
+	// 		});
+	// 	});
+	// 	setTimeout(function(){
+	// 		_callback();
+	// 	},100);
+	// }
+	// function fDetect(src,_callback){
+	// 	renderImg(src,function(){
+	// 		facedetection(function(){
+	// 			console.log("DETECT "+window.osoby+" PEOPLES");
+	// 			_callback();
+	// 		});
+	// 	});
+	// }
 </script>
 
 <script>
@@ -604,6 +606,7 @@ if(location.search == "?dev=on" ){
 	console.log({ mode : "development" })
 	document.querySelector(".camDIVWrapper").style.zIndex = 7;
 	document.querySelector(".btns").style.display = "flex";
+	countFrom = 1;
 }
 // function gestDone(){
 const gestDone = () =>{
@@ -655,6 +658,7 @@ const controller = {
 		async detect(){
 			const { data } = await axios.get(base_url + '/api/faceRecognition')
 			console.log({ ...data })
+			return { ...data }
 		}
 	}
 }
