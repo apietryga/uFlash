@@ -30,24 +30,21 @@ module.exports = new class ImageController {
     // 	$filename = '../img/captured_small/small_'.$newest_file;
     // 	imagecopyresampled($tmp, $src, 0, 0, 0, 0, 645, 430, $width, $height); 
     // 	imagejpeg($tmp, $filename, 100);		
-    res.json({ "test": true })
+    res.json({ "source": "capture", "message" : "not setted yet" })
   }
 
   /**
    * Getting image from WebCam
-   * @param {Object} req - Request object
-   * @param {Object} res - Response object
-   * @returns {Object} - Returns a JSON object
    */
   capturePOST ( req, res) {
     const tempPath = req.file.path;
     const dir = path.join(__dirname, "../../storage");
     if (!fs.existsSync(dir)){ fs.mkdirSync(dir) }
-
-    const targetPath = dir + "/img_"+ fs.readdirSync(dir).length +".png";
+    // const targetPath = dir + "/img_"+ fs.readdirSync(dir).length +".png";
+    const targetPath = dir + "/img_"+ fs.readdirSync(dir).length +".jpg";
     fs.rename(tempPath, targetPath, err => {
-      if (err) return res.json({ err });
-      res.json({ "success": true })
+      if (err) return res.json({ "message": "image uploading error", err });
+      res.json({ "message": "image uploaded" })
     });
   }
 }
