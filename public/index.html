@@ -68,12 +68,13 @@
 			<button onclick="newGesture(2)">B2</button>
 			<button onclick="newGesture(3)">B3</button>
 			<button onclick="newGesture(4)">B4</button>
+			<button onclick="controller.webcam.uploadPhoto()">UPLOAD IMAGE</button>
 			<button onclick="controller.leds.on()">LED ON</button>
 			<button onclick="controller.leds.off()">LED OFF</button>
-			 -->
 			<button onclick="controller.faceDetection.detect()">Face Detection</button>
+			 -->
+			<button onclick="controller.template.make()">TEMPLATE</button>
 			<button onclick="gestDone()">GESTURE</button>
-			<button onclick="controller.webcam.uploadPhoto()">UPLOAD IMAGE</button>
 			<!-- <form id="uploadform" method="post" enctype="multipart/form-data" action="http://localhost:3000/api/capture">
 				<input type="file" name="file">
 				<input type="submit" value="Submit">
@@ -169,7 +170,7 @@
 	// function displayScreen(id,x = 0){
 	const displayScreen = async ( id, x = 0 ) => {
 		// console.log("SCREEN ID: "+id);
-		console.log({ STAGE: id, x });
+		console.log({ "message": "STAGE "+id, x });
 		// let val = "";
 		if(id == 0){
 			// if(ge0){ ge0.style.display = "block" }
@@ -234,19 +235,19 @@
 			// message.innerHTML = val;
 			message.innerHTML = "LICZĘ OSOBY NA ZDJĘCIU";
 			const { faces } = await controller.faceDetection.detect()
-			console.log({ faces })
 
-			message.innerHTML = "LICZĘ OSOBY NA ZDJĘCIU (" + faces.length + ")";
-			await common.wait(5);
-
-			console.log("PREPARING PHOTO TEMPLATE");
 			// src = "inc/img/captured_small/small_"+window.lastCaptured;
 			// src = "inc/img/captured_small/small_" + lastCaptured;
 			// console.log("IMG SRC: "+src);
 			// fDetect(src,function(){
 			// fDetect("",function(){
+			message.innerHTML = "LICZĘ OSOBY NA ZDJĘCIU (" + faces.length + ")";
+			await common.wait(5);
+
 			// 	setPhoto(function(){
 			// 		renderPicture(function() {
+			console.log("PREPARING PHOTO TEMPLATE");
+			await controller.template.make()
 			// 			for(x = 0; x < window.osoby; x++){
 			// 				drukuj();
 			// 			}
@@ -606,7 +607,7 @@ if(location.search == "?dev=on" ){
 	console.log({ mode : "development" })
 	document.querySelector(".camDIVWrapper").style.zIndex = 7;
 	document.querySelector(".btns").style.display = "flex";
-	countFrom = 1;
+	countFrom = 0;
 }
 // function gestDone(){
 const gestDone = () =>{
@@ -657,6 +658,13 @@ const controller = {
 	faceDetection: {
 		async detect(){
 			const { data } = await axios.get(base_url + '/api/faceRecognition')
+			console.log({ ...data })
+			return { ...data }
+		}
+	},
+	template: {
+		async make(){
+			const { data } = await axios.get(base_url + '/api/template')
 			console.log({ ...data })
 			return { ...data }
 		}

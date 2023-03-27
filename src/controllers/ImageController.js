@@ -1,6 +1,6 @@
 const path = require('path');
 const fs = require('fs');
-
+const sharp = require('sharp');
 module.exports = new class ImageController {
   
   /**
@@ -46,5 +46,31 @@ module.exports = new class ImageController {
       if (err) return res.json({ "message": "image uploading error", err });
       res.json({ "message": "image uploaded" })
     });
+  }
+
+  /**
+   * Combine images with template
+   * https://sharp.pixelplumbing.com/api-composite
+   */
+  template ( req, res ) {
+    const dir = path.join(__dirname, "../../storage");
+    const files = fs.readdirSync(dir);
+    const file_numbers = files.map( file => file.split("_")[1].split(".")[0] * 1)
+    file_numbers.sort()
+    const max_file_number = Math.max(...file_numbers)
+    const last_file = "img_" + max_file_number + ".jpg";
+    const last_file_path = dir + "/" + last_file;
+    const template_path = path.join(__dirname, "../../public/inc/img/templates/blank_template.png");
+    const output_path = path.join(__dirname, "../../public/inc/img/output.jpg");
+    sharp(template_path)
+      .composite([{ input: last_file_path, gravity: "southeast" }])
+      .toFile(output_path, (err, info) => {
+        if (err) return res.json({ "message": "template error", err });
+        res.json({ "message": "template created" })
+      });
+    //
+
+
+    res.json({ "message": "template module is in progress" })
   }
 }

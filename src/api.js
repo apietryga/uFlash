@@ -7,6 +7,7 @@ const ImageController = require('./controllers/ImageController')
 const LedsController = require('./controllers/LedsController')
 const FaceRecognitionController = require('./controllers/FaceRecognitionController')
 
+  router.route('/template').get( ImageController.template )
   router.route('/capture').get( ImageController.captureGET )
                           .post( upload.single("file"), ImageController.capturePOST )
 

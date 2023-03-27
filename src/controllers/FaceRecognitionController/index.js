@@ -1,6 +1,3 @@
-
-
-
 const path = require("path");
 const tf = require("@tensorflow/tfjs-node");
 const faceapi = require("@vladmandic/face-api/dist/face-api.node.js");
@@ -69,6 +66,6 @@ module.exports = new class FaceRecognitionController{
 
     const faces = await main(resized)
 
-    res.json({ message: 'faceRecognition: module testing now', faces })
+    res.json({ message: 'faces counted successfully', faces })
   }
 }
