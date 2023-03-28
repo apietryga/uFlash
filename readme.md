@@ -4,17 +4,16 @@ Photobooth system prepared for mirrored booths [read more](https://apietryga.git
 ## Installation
 Software tested on Rasberry Pi 3 and here's the process of configuring this device:
 
-Install npm
+Install npm ( tested on 8.5.1 )
 ```bash
 sudo apt-get update
-sudo apt install npm --fix-missing
-sudo npm install -g npm@latest
+sudo apt install npm
 ```
 
 If you natively have node >= 14.15 you can skip this step, if not - install it by node version manager
 ```bash
 sudo npm install -g n
-sudo n stable
+sudo n v14.15
 ```
 
 Then clone this repository there
@@ -26,7 +25,7 @@ Here'll be need to refresh window by reopen bash, then:
 ```bash
 cd uflash
 sudo npm cache clean --force
-npm i
+npm i --no-optional
 ```
 
 And you're ready to run uFlash* software by
