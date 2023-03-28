@@ -1202,10 +1202,10 @@ fi
 
 WIFI_IFACE=$1
 
-if ! is_wifi_interface ${WIFI_IFACE}; then
-    echo "ERROR: '${WIFI_IFACE}' is not a WiFi interface" >&2
-    exit 1
-fi
+# if ! is_wifi_interface ${WIFI_IFACE}; then
+#     echo "ERROR: '${WIFI_IFACE}' is not a WiFi interface" >&2
+#     exit 1
+# fi
 
 if ! can_be_ap ${WIFI_IFACE}; then
     echo "ERROR: Your adapter does not support AP (master) mode" >&2
