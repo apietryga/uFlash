@@ -40,3 +40,7 @@ To develop project just clone it, install, as showed above, and then install nod
 npm i nodemon -g
 npm run dev
 ```
+
+
+## Ubutu packages to run hotspot 
+sudoa apt install iw
