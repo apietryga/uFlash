@@ -1,4 +1,5 @@
-const { exec } = require('node:child_process');
+// const { exec } = require('node:child_process');
+const { exec } = require('child_process');
 
 module.exports = new class LedsController{
 

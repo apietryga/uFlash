@@ -2,6 +2,16 @@ const path = require('path');
 const fs = require('fs');
 const sharp = require('sharp');
 module.exports = new class ImageController {
+
+  createDirIfNotExists(dir) {
+    if (!fs.existsSync(dir)){ 
+      if( !fs.existsSync(path.dirname(dir)) ){
+        this.createDirIfNotExists(path.dirname(dir))
+      }
+      fs.mkdirSync(dir) 
+    }
+    return dir
+  }
   
   /**
   * Getting image from external EOS camera
@@ -38,8 +48,10 @@ module.exports = new class ImageController {
    */
   capturePOST ( req, res) {
     const tempPath = req.file.path;
-    const dir = path.join(__dirname, "../../storage");
-    if (!fs.existsSync(dir)){ fs.mkdirSync(dir) }
+    // const dir = path.join(__dirname, "../../storage");
+    // if (!fs.existsSync(dir)){ fs.mkdirSync(dir) }
+    console.log({ this : this})
+    const dir = this.createDirIfNotExists(path.join(__dirname, "../../storage/captured"));
     // const targetPath = dir + "/img_"+ fs.readdirSync(dir).length +".png";
     const targetPath = dir + "/img_"+ fs.readdirSync(dir).length +".jpg";
     fs.rename(tempPath, targetPath, err => {

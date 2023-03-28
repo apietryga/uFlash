@@ -172,3 +172,8 @@ function checkAreas(){
 	}
 	
 };
+
+
+window.addEventListener('load', ()=>{
+	start_media();
+})
