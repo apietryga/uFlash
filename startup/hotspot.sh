@@ -113,7 +113,8 @@ cleanup_lock() {
 }
 
 init_lock() {
-    local LOCK_FILE=/tmp/create_ap.all.lock
+    # local LOCK_FILE=/tmp/create_ap.all.lock
+    local LOCK_FILE=create_ap.all.lock
 
     # we initialize only once
     [[ $LOCK_FD -ne 0 ]] && return 0
