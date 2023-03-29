@@ -172,7 +172,6 @@ body {
 .ga4 { stroke-dashoffset: 0 }
 
 .btns{
-	border:5px dashed red;
 	position: fixed;
 	left:0;
 	bottom:0;

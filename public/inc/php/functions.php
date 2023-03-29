@@ -94,28 +94,28 @@
 		imagecopyresampled($tmp, $src, 0, 0, 0, 0, 645, 430, $width, $height); 
 		imagejpeg($tmp, $filename, 100);		
 	}
-	if(isset($_GET['print'])){
-		$src = "\\forprinter.jpg";
-		$paste = getSRCiv().''.$src.' /print';
-		$o = fopen("../bat/print.bat","w");
-		fwrite($o,$paste);
-		fclose($o);
-		$path = getSRC()."print.bat";
-		exec($path);
-	}
-	if(isset($_GET['checkstatus'])){
-		sleep(1);
-		$path = getSRC()."checkstatus.bat";
-		exec($path,$ex);
-		$y = 0;
-		for($x = 0 ; $x <= count($ex)-2; $x++){
-			if($x > 2){
-			//	echo $x.":".$ex[$x]."<br /><br /><br />";
-				$y++;
-			}
-		}
-		echo $y;
-	}
+	// if(isset($_GET['print'])){
+	// 	$src = "\\forprinter.jpg";
+	// 	$paste = getSRCiv().''.$src.' /print';
+	// 	$o = fopen("../bat/print.bat","w");
+	// 	fwrite($o,$paste);
+	// 	fclose($o);
+	// 	$path = getSRC()."print.bat";
+	// 	exec($path);
+	// }
+	// if(isset($_GET['checkstatus'])){
+	// 	sleep(1);
+	// 	$path = getSRC()."checkstatus.bat";
+	// 	exec($path,$ex);
+	// 	$y = 0;
+	// 	for($x = 0 ; $x <= count($ex)-2; $x++){
+	// 		if($x > 2){
+	// 		//	echo $x.":".$ex[$x]."<br /><br /><br />";
+	// 			$y++;
+	// 		}
+	// 	}
+	// 	echo $y;
+	// }
 	if(isset($_GET['upload'])){
 		$data = $_POST['file'];
 		$data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $data));
