@@ -1,7 +1,8 @@
 const { Router } = require('express')
 const router = Router()
 const multer = require("multer");
-const upload = multer({ dest: "./temp"});
+// const upload = multer({ dest: "./temp"});
+const upload = multer({ dest: "./storage/temp"});
 
 const ImageController = require('./controllers/ImageController')
 const LedsController = require('./controllers/LedsController')

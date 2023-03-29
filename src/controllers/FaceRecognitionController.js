@@ -2,7 +2,8 @@ const path = require("path");
 const tf = require("@tensorflow/tfjs-node");
 const faceapi = require("@vladmandic/face-api/dist/face-api.node.js");
 const fs = require("fs");
-const modelPathRoot = "./models";
+// const modelPathRoot = "./models";
+const modelPathRoot = "../models/FaceRecognition";
 const sharp = require('sharp');
 
 let optionsSSDMobileNet;
@@ -52,13 +53,13 @@ async function main(file) {
 
 module.exports = new class FaceRecognitionController{
   async detect( req, res ){
-    const dir = path.join(__dirname, "../../../storage");
+    const dir = path.join(__dirname, "../../storage/captured");
     const files = fs.readdirSync(dir);
     const file_numbers = files.map( file => file.split("_")[1].split(".")[0] * 1)
     file_numbers.sort()
     const max_file_number = Math.max(...file_numbers)
     const last_file = "img_" + max_file_number + ".jpg";
-    const img_path = path.join(__dirname, "../../../storage", last_file);
+    const img_path = path.join(__dirname, "../../../storage/captured", last_file);
     const resized = await sharp(img_path)
       .resize(612,408)
       .jpeg({ mozjpeg: true })
