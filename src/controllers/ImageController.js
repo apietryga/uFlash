@@ -1,6 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 const sharp = require('sharp');
+const files = require('../modules/files')
 module.exports = new class ImageController {
 
   createDirIfNotExists(dir) {
@@ -68,24 +69,36 @@ module.exports = new class ImageController {
 
     console.log(" OK, lets make a template! ")
 
-    const dir = path.join(__dirname, "../../storage");
-    const files = fs.readdirSync(dir);
-    const file_numbers = files.map( file => file.split("_")[1].split(".")[0] * 1)
-    file_numbers.sort()
-    const max_file_number = Math.max(...file_numbers)
-    const last_file = "img_" + max_file_number + ".jpg";
-    const last_file_path = dir + "/" + last_file;
-    const template_path = path.join(__dirname, "../../public/inc/img/templates/blank_template.png");
-    const output_path = path.join(__dirname, "../../public/inc/img/output.jpg");
+    const dir = path.join(__dirname, "../../storage/captured");
+    // const files = fs.readdirSync(dir);
+    // console.log({ files })
+    // const file_numbers = files.map( file => file.split("_")[1].split(".")[0] * 1)
+    // file_numbers.sort()
+    // const max_file_number = Math.max(...file_numbers)
+    // const last_file = "img_" + max_file_number + ".jpg";
+    // const last_file_path = dir + "/" + last_file;
+    const last_file_path = dir + "/img_" + files.getMaxFileNumber(dir) + ".jpg";
+    // const template_path = path.join(__dirname, "../../public/inc/img/templates/blank_template.png");
+    const template_path = path.join(__dirname, "../models/Templates/blank_template.png");
+
+
+    // const max_file_number = files.getMaxFileNumber(dir)
+
+    // const output_path = path.join(__dirname, "../../storage/results/output_" + ( max_file_number + 1 ) + ".png");
+
+    const outdir = this.createDirIfNotExists(path.join(__dirname, "../../storage/results/"));
+    const output_path = path.join(__dirname, "../../storage/results/output_" + ( files.getMaxFileNumber(outdir) + 1 ) + ".png");
+
+    console.log({ template_path })
     sharp(template_path)
       .composite([{ input: last_file_path, gravity: "southeast" }])
       .toFile(output_path, (err, info) => {
+        console.log({ err, info })
         if (err) return res.json({ "message": "template error", err });
         res.json({ "message": "template created" })
       });
-    //
 
 
-    res.json({ "message": "template module is in progress" })
+    // res.json({ "message": "template module is in progress" })
   }
 }

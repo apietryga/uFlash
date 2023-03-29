@@ -4,6 +4,7 @@ const faceapi = require("@vladmandic/face-api/dist/face-api.node.js");
 const fs = require("fs");
 // const modelPathRoot = "./models";
 const modelPathRoot = "../models/FaceRecognition";
+const files = require("../modules/files");
 const sharp = require('sharp');
 
 let optionsSSDMobileNet;
@@ -54,10 +55,11 @@ async function main(file) {
 module.exports = new class FaceRecognitionController{
   async detect( req, res ){
     const dir = path.join(__dirname, "../../storage/captured");
-    const files = fs.readdirSync(dir);
-    const file_numbers = files.map( file => file.split("_")[1].split(".")[0] * 1)
-    file_numbers.sort()
-    const max_file_number = Math.max(...file_numbers)
+    // const files = fs.readdirSync(dir);
+    // const file_numbers = files.map( file => file.split("_")[1].split(".")[0] * 1)
+    // file_numbers.sort()
+    // const max_file_number = Math.max(...file_numbers)
+    const max_file_number = files.getMaxFileNumber(dir)
     const last_file = "img_" + max_file_number + ".jpg";
     const img_path = path.join(__dirname, "../../storage/captured", last_file);
     const resized = await sharp(img_path)
