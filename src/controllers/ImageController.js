@@ -65,6 +65,9 @@ module.exports = new class ImageController {
    * https://sharp.pixelplumbing.com/api-composite
    */
   template ( req, res ) {
+
+    console.log(" OK, lets make a template! ")
+
     const dir = path.join(__dirname, "../../storage");
     const files = fs.readdirSync(dir);
     const file_numbers = files.map( file => file.split("_")[1].split(".")[0] * 1)

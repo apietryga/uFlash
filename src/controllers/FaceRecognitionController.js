@@ -59,7 +59,7 @@ module.exports = new class FaceRecognitionController{
     file_numbers.sort()
     const max_file_number = Math.max(...file_numbers)
     const last_file = "img_" + max_file_number + ".jpg";
-    const img_path = path.join(__dirname, "../../../storage/captured", last_file);
+    const img_path = path.join(__dirname, "../../storage/captured", last_file);
     const resized = await sharp(img_path)
       .resize(612,408)
       .jpeg({ mozjpeg: true })
