@@ -131,10 +131,10 @@
 		</div>
 
 
-		<div class="results">
-		</div>
+		<!-- <div class="results">
+		</div> -->
 		<!-- do renderów -->
-		<input id="filledTemplate" name="file" style='display:none;'/>
+		<!-- <input id="filledTemplate" name="file" style='display:none;'/> -->
 		<!-- end of do renderów -->	
 	<!-- END OF FUNKCYJNE -->
 	</body>
@@ -153,11 +153,11 @@
 	// window.fotaPO = 0; // PO ILU MA WEJŚĆ CAPTURE SEC
 	/* ^^poprawić na 5*/
 	window.RobieFoto = 0; // app.js
-	window.lastCaptured = 0;
-	window.photox = [];
-	window.nrofpic = 0;	
-	window.kolejkaDruku = 0;
-	window.allowScreen6 = false;
+	// window.lastCaptured = 0;
+	// window.photox = [];
+	// window.nrofpic = 0;	
+	// window.kolejkaDruku = 0;
+	// window.allowScreen6 = false;
 
 
 	// const ge0 = document.querySelector(".ge0");
@@ -334,18 +334,18 @@
 	  // xhttp.open("GET", "inc/php/functions.php?capture=true", true);
 	  // xhttp.send();
 	}
-	function setPhoto(_callback){
-	  var xhttp = new XMLHttpRequest();
-	  xhttp.onreadystatechange = function() {
-		if (this.readyState == 4 && this.status == 200) {
-			phtx = eval(this.responseText);
-			drawImage('5x15',phtx);
-			_callback();
-		}
-	  };
-	  xhttp.open("GET", "inc/php/functions.php?photos=true", true);
-	  xhttp.send();		
-	}
+	// function setPhoto(_callback){
+	//   var xhttp = new XMLHttpRequest();
+	//   xhttp.onreadystatechange = function() {
+	// 	if (this.readyState == 4 && this.status == 200) {
+	// 		phtx = eval(this.responseText);
+	// 		drawImage('5x15',phtx);
+	// 		_callback();
+	// 	}
+	//   };
+	//   xhttp.open("GET", "inc/php/functions.php?photos=true", true);
+	//   xhttp.send();		
+	// }
 	// function ledON(_callback){
 	// console.log("LED ON");
 	//   var xhttp = new XMLHttpRequest();
