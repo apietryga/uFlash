@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path');
 
 module.exports = new class filesModule {
 
@@ -6,10 +7,20 @@ module.exports = new class filesModule {
     const files = fs.readdirSync(dir);
     const file_numbers = files.map( file => file.split("_")[1].split(".")[0] * 1)
     file_numbers.sort()
-    // const max_file_number = Math.max(...file_numbers)
+    if(file_numbers.length == 0){
+      return 0
+    }
     return Math.max(...file_numbers)
-    // const last_file = "img_" + max_file_number + ".jpg";
   }
 
+  createDirIfNotExists(dir) {
+    if (!fs.existsSync(dir)){ 
+      if( !fs.existsSync(path.dirname(dir)) ){
+        this.createDirIfNotExists(path.dirname(dir))
+      }
+      fs.mkdirSync(dir) 
+    }
+    return dir
+  }
 
 }

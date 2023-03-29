@@ -4,15 +4,15 @@ const sharp = require('sharp');
 const files = require('../modules/files')
 module.exports = new class ImageController {
 
-  createDirIfNotExists(dir) {
-    if (!fs.existsSync(dir)){ 
-      if( !fs.existsSync(path.dirname(dir)) ){
-        this.createDirIfNotExists(path.dirname(dir))
-      }
-      fs.mkdirSync(dir) 
-    }
-    return dir
-  }
+  // createDirIfNotExists(dir) {
+  //   if (!fs.existsSync(dir)){ 
+  //     if( !fs.existsSync(path.dirname(dir)) ){
+  //       this.createDirIfNotExists(path.dirname(dir))
+  //     }
+  //     fs.mkdirSync(dir) 
+  //   }
+  //   return dir
+  // }
   
   /**
   * Getting image from external EOS camera
@@ -52,7 +52,7 @@ module.exports = new class ImageController {
     // const dir = path.join(__dirname, "../../storage");
     // if (!fs.existsSync(dir)){ fs.mkdirSync(dir) }
     console.log({ this : this})
-    const dir = this.createDirIfNotExists(path.join(__dirname, "../../storage/captured"));
+    const dir = files.createDirIfNotExists(path.join(__dirname, "../../storage/captured"));
     // const targetPath = dir + "/img_"+ fs.readdirSync(dir).length +".png";
     const targetPath = dir + "/img_"+ fs.readdirSync(dir).length +".jpg";
     fs.rename(tempPath, targetPath, err => {
@@ -86,7 +86,7 @@ module.exports = new class ImageController {
 
     // const output_path = path.join(__dirname, "../../storage/results/output_" + ( max_file_number + 1 ) + ".png");
 
-    const outdir = this.createDirIfNotExists(path.join(__dirname, "../../storage/results/"));
+    const outdir = files.createDirIfNotExists(path.join(__dirname, "../../storage/results/"));
     const output_path = path.join(__dirname, "../../storage/results/output_" + ( files.getMaxFileNumber(outdir) + 1 ) + ".png");
 
     console.log({ template_path })

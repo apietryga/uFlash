@@ -2,6 +2,9 @@ const { Router } = require('express')
 const router = Router()
 const multer = require("multer");
 // const upload = multer({ dest: "./temp"});
+const files = require('./modules/files')
+
+files.createDirIfNotExists("./storage/temp")
 const upload = multer({ dest: "./storage/temp"});
 
 const ImageController = require('./controllers/ImageController')
