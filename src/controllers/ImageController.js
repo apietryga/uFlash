@@ -4,16 +4,6 @@ const sharp = require('sharp');
 const files = require('../modules/files')
 module.exports = new class ImageController {
 
-  // createDirIfNotExists(dir) {
-  //   if (!fs.existsSync(dir)){ 
-  //     if( !fs.existsSync(path.dirname(dir)) ){
-  //       this.createDirIfNotExists(path.dirname(dir))
-  //     }
-  //     fs.mkdirSync(dir) 
-  //   }
-  //   return dir
-  // }
-  
   /**
   * Getting image from external EOS camera
   * !NOT TESTED YET! - GETTED FROM public/inc/php/functions.php
@@ -49,11 +39,7 @@ module.exports = new class ImageController {
    */
   capturePOST ( req, res) {
     const tempPath = req.file.path;
-    // const dir = path.join(__dirname, "../../storage");
-    // if (!fs.existsSync(dir)){ fs.mkdirSync(dir) }
-    console.log({ this : this})
     const dir = files.createDirIfNotExists(path.join(__dirname, "../../storage/captured"));
-    // const targetPath = dir + "/img_"+ fs.readdirSync(dir).length +".png";
     const targetPath = dir + "/img_"+ fs.readdirSync(dir).length +".jpg";
     fs.rename(tempPath, targetPath, err => {
       if (err) return res.json({ "message": "image uploading error", err });
@@ -66,39 +52,20 @@ module.exports = new class ImageController {
    * https://sharp.pixelplumbing.com/api-composite
    */
   template ( req, res ) {
-
-    console.log(" OK, lets make a template! ")
-
     const dir = path.join(__dirname, "../../storage/captured");
-    // const files = fs.readdirSync(dir);
-    // console.log({ files })
-    // const file_numbers = files.map( file => file.split("_")[1].split(".")[0] * 1)
-    // file_numbers.sort()
-    // const max_file_number = Math.max(...file_numbers)
-    // const last_file = "img_" + max_file_number + ".jpg";
-    // const last_file_path = dir + "/" + last_file;
-    const last_file_path = dir + "/img_" + files.getMaxFileNumber(dir) + ".jpg";
-    // const template_path = path.join(__dirname, "../../public/inc/img/templates/blank_template.png");
-    const template_path = path.join(__dirname, "../models/Templates/blank_template.png");
-
-
-    // const max_file_number = files.getMaxFileNumber(dir)
-
-    // const output_path = path.join(__dirname, "../../storage/results/output_" + ( max_file_number + 1 ) + ".png");
-
+    const imgs = [ 2, 1, 0 ].map( i => dir + "\\img_" + ( files.getMaxFileNumber(dir) - i ) + ".jpg" )
+    const template_path = path.join(__dirname, "../models/Templates/blank_template3.png");
     const outdir = files.createDirIfNotExists(path.join(__dirname, "../../storage/results/"));
     const output_path = path.join(__dirname, "../../storage/results/output_" + ( files.getMaxFileNumber(outdir) + 1 ) + ".png");
-
-    console.log({ template_path })
     sharp(template_path)
-      .composite([{ input: last_file_path, gravity: "southeast" }])
-      .toFile(output_path, (err, info) => {
-        console.log({ err, info })
-        if (err) return res.json({ "message": "template error", err });
-        res.json({ "message": "template created" })
-      });
-
-
-    // res.json({ "message": "template module is in progress" })
+    .composite([
+      { input: imgs[0], top: 50, left: 50 },
+      { input: imgs[1], top: 600, left: 50 },
+      { input: imgs[2], top: 1150, left: 50 },
+    ])
+    .toFile(output_path, (err, info) => {
+      if (err) return res.json({ "message": "template error", err });
+      res.json({ "message": "template created" })
+    });
   }
 }
