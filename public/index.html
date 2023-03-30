@@ -10,8 +10,9 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link rel="stylesheet" href="assets/css/main.css"/>
 		<script src="assets/js/axios_1.3.4.min.js"></script>
+		<script src="assets/js/app.js" defer></script>
 		<script src="inc/js/buffer-loader.js"></script>
-		<script src="inc/js/app.js" defer></script>
+		<!-- <script src="inc/js/app.js" defer></script> -->
 
 		<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.4/axios.min.js"></script> -->
 	</head>
@@ -98,10 +99,10 @@
 		</table>
 
 	<!-- FUNKCYJNE -->
-		<div id="plotter"></div>
+		<!-- <div id="plotter"></div>
 		<div id="dodruk"></div>
 		<div id="gestVal" style="color:#fff;position:absolute;top:0;left:0;font-size:10em;z-index:2;"></div>
-		<div id="gestVal2" style="color:#fff;position:absolute;top:100px;left:0;font-size:10em;z-index:2;"></div>
+		<div id="gestVal2" style="color:#fff;position:absolute;top:100px;left:0;font-size:10em;z-index:2;"></div> -->
 
 		<div class="camDIVWrapper">
 			<div class="camDIV">
@@ -117,10 +118,10 @@
 						<img id="button1" src="inc/img/gesture/b.webp" />
 						<img id="button2" src="inc/img/gesture/b.webp" />
 						<img id="button3" src="inc/img/gesture/b.webp" /> -->
-						<img id="button0" src="inc/img/gesture/b1.png"/>
+						<!-- <img id="button0" src="inc/img/gesture/b1.png"/>
 						<img id="button1" src="inc/img/gesture/b2.png"/>
 						<img id="button2" src="inc/img/gesture/b4.png"/>
-						<img id="button3" src="inc/img/gesture/b.png"/>
+						<img id="button3" src="inc/img/gesture/b.png"/> -->
 						<!-- <div id="button0" class="button">1</div>
 						<div id="button1" class="button">2</div>
 						<div id="button2" class="button">3</div>
@@ -174,10 +175,10 @@
 		console.log("SCREEN ID: " + id + " X: " + x);
 		// console.log({ "message": "STAGE "+id, x });
 		// let val = "";
-		if(id == 0){
-			// if(ge0){ ge0.style.display = "block" }
-			return newGesture(0);
-		}
+		// if(id == 0){
+		// 	// if(ge0){ ge0.style.display = "block" }
+		// 	return newGesture(0);
+		// }
 		// if(id == 1){
 			gestureWrapper.style.opacity = 0;
 			loader.style.animation = "rotate 2s linear infinite";
@@ -293,7 +294,8 @@
 				loader.style.animation = "unset";
 				message.innerHTML = ""
 				// checkGest(0);
-				displayScreen(0);
+				// displayScreen(0);
+				newGesture(0)
 
 				// clearTimeout(odbior);
 				var liczGest = setInterval(myTimer, 200);				
@@ -570,7 +572,8 @@
 	// 	return 1;
 	// }
 	// window.onload = start_media();
-	displayScreen(0);
+	// displayScreen(0);
+	newGesture(0)
 	// development
 	// function gestDone(){
 	// 	window.stoptimer = 1;

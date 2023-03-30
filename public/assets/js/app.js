@@ -177,3 +177,30 @@ function checkAreas(){
 window.addEventListener('load', ()=>{
 	start_media();
 })
+
+/**
+ * Create imgs to show 
+ * gesture places
+ */
+for(const i of [0, 1, 2, 3]){
+	const canvas = document.createElement("canvas");
+	const context = canvas.getContext("2d");
+	canvas.width = 70;
+	canvas.height = 70;
+	context.beginPath();
+	context.arc(35, 35, 35, 0, 2 * Math.PI, false);
+	context.fillStyle = '#fff';
+	context.fill();
+	context.lineWidth = 17;
+	context.strokeStyle = '#2674E1';
+	context.stroke();
+	context.fillStyle = '#000';
+	context.font = "25px Arial";
+	context.fillText( i , 28, 45);
+	const butt = document.createElement('img');
+	butt.src = canvas.toDataURL();
+	butt.id = "button" + i;
+	butt.style.border = "2px solid #fff"
+	butt.style.borderRadius = "50%"
+	document.querySelector("#front").append(butt);
+}
