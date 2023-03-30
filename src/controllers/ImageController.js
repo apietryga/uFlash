@@ -32,6 +32,8 @@ module.exports = new class ImageController {
     // 	imagecopyresampled($tmp, $src, 0, 0, 0, 0, 645, 430, $width, $height); 
     // 	imagejpeg($tmp, $filename, 100);		
     res.json({ "source": "capture", "message" : "not setted yet" })
+    // ! capture.bat : 
+    // C:\xampp\htdocs\inc\digicam\CameraControlCmd.exe /folder C:\xampp\htdocs\inc\img\captured /captureall
   }
 
   /**
