@@ -106,6 +106,7 @@ body {
 	z-index:6;
 	transition:2s;
 }
+#loader,
 .gesture{
 	position:absolute;
 	width:100%;
