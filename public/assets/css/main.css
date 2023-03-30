@@ -1,4 +1,13 @@
 *{ box-sizing: border-box }
+:root {
+	--dev-size:15px;
+	--el-size:35vw;
+	--borders-size:50px;
+	--light: #FFF;
+	--light-secondary: #848484;
+	--dark: #000;
+}
+
 html,
 body {
 	color:#fff;
@@ -19,14 +28,15 @@ body {
 .camDIVWrapper{
 	width:fit-content;
 	position:fixed;
-	bottom:0;
-	right:0;
+	/* bottom:var(--dev-size); */
+	bottom:calc(var(--dev-size));
+	right:var(--dev-size);
+	border:2px solid #fff;
 }
 .camDIV{
 	width:640px;
 	height:480px;
 	position: relative;
-	border:2px solid #fff;
 }
 .camDIV #webcam {
 	display:none;
@@ -87,12 +97,20 @@ body {
 	height:100px;
 	background-color:red;
 }
-#disMess{
-	text-align:center;
-	vertical-align:middle;
-	padding:5%;
+#message{
+	align-items: center;
+	display:flex;
+	font-size:5em;
+	height:100%;
+	justify-content: center;
+	left:0;
+	position:fixed;
+	text-align: center;
+	top:0;
+	width:100%;
+	z-index: 6;
 }
-#mainscene{
+/* #mainscene{
 	position:fixed;
 	width:100%;
 	height:100%;
@@ -105,8 +123,7 @@ body {
 	top:0;
 	opacity:1;
 	pointer-events: none;
-	/* display:none; */
-}
+} */
 #gesture{
 	align-items: center;
 	display:flex;
@@ -118,13 +135,7 @@ body {
 	width:100%;
 	z-index:5;
 }
-:root{
-	--el-size:35vw;
-	--borders-size:50px;
-	--light: #FFF;
-	--light-secondary: #848484;
-	--dark: #000;
-}
+
 .stageWrapper{
 	z-index:6;
 	background:var(--dark);
@@ -139,6 +150,7 @@ body {
 }
 #loader {
 	z-index:6;
+	transition:2s;
 }
 #loader,
 .gesture{
@@ -172,6 +184,7 @@ body {
 .ga4 { stroke-dashoffset: 0 }
 
 .btns{
+	margin:var(--dev-size);
 	position: fixed;
 	left:0;
 	bottom:0;
@@ -183,12 +196,6 @@ body {
 	font-size:1.2em;
 	padding:.5em 1em;
 	margin:.25em;
-}
-
-#countP{
-	font-size:5em;
-	color:#fff;
-	padding:0;	
 }
 @keyframes rotate {
 	from { transform: rotate(0deg) }

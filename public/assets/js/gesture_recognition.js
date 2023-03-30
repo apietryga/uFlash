@@ -29,6 +29,9 @@ var AudioContext=(window.AudioContext||window.webkitAudioContext||null);
 var notesPosX=[170,140,430,400];
 var notesPosY=[100,360,360,130];
 window.notes = notesPosY.length;
+window.gestNote = 0;
+window.stoptimer = 0;
+var liczGest = setInterval(myTimer, 200);
 var timeOut,lastImageData;
 
 // var canvasSource=$("#canvas-source")[0];
@@ -171,7 +174,35 @@ function checkAreas(){
 		}
 	}
 	
-};
+}
+function checkGest(id){
+	if(window.stoptimer == 1){
+		window.stoptimer = 0;
+		if(window.gestNote == 3 && id == 3){
+			if(controller.photoProgress == 0){
+				controller.photoProgress = 1;
+				window.gestNote = 4;
+				console.log("GESTURE PASSED");
+				skonczGest()
+				controller.photoLoop()
+			}
+		}else if(window.gestNote == id){
+			window.gestNote++;
+		}else if(window.gestNote == id+1 ){
+			// next step to BANG! 
+		}else{
+			window.gestNote = 0;
+		}
+		controller.newGesture(window.gestNote);
+	}
+}
+function myTimer(){
+	window.stoptimer = 1;
+}
+function skonczGest(){
+	clearInterval(liczGest);		
+}
+
 
 
 window.addEventListener('load', ()=>{
