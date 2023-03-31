@@ -1,0 +1,38 @@
+*{
+	margin:0;
+	box-sizing: border-box;
+}
+body{
+	background-color:#000;
+	color:#fff;
+}
+h1{
+	margin:.5rem 1rem;
+}
+body > section{
+	padding:.5rem;
+	background: #fff;
+	border:2px double #000;
+	color:#000;
+}
+.wrapper{
+	display:flex;
+	overflow-x:auto;;
+	height:calc(30vh + 4px + .2em);
+}
+.wrapper div{
+	margin:0 .2em;
+}
+.wrapper div img{
+	border:2px dashed #000;
+	max-height:30vh;
+}
+.wrapper div .active{
+	border:2px solid red;
+}
+footer{
+	padding:2em;
+}
+footer p{
+	text-align: right;
+}

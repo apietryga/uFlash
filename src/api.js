@@ -1,7 +1,6 @@
 const { Router } = require('express')
 const router = Router()
 const multer = require("multer");
-// const upload = multer({ dest: "./temp"});
 const files = require('./modules/files')
 
 files.createDirIfNotExists("./storage/temp")
