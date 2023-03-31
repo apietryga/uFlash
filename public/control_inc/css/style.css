@@ -1,6 +1,24 @@
-html{
+/* NEW STYLES */
+body{
 	background-color:#000;
+	color:#fff;
 }
+.templates{
+	border:2px dashed red;
+	display:flex;
+	overflow-x:auto;;
+}
+.templates div{
+	border:2ox dashed blue;
+}
+
+.templates div img{
+	border:2px dashed green;
+	/* max-width: */
+	max-height:20vh;
+}
+
+/* OLD STYLES */
 #mainTbl{
 	width:100%;
 	height:100%;

@@ -6,6 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="control_inc/css/style.css" />
 	<script src="assets/js/axios_1.3.4.min.js"></script>
+	<script src="assets/js/config.js"></script>
 	<title>uFlash* Control Panel</title>
 </head>
 <body>
@@ -16,14 +17,10 @@
 		<header>
 			<h2>Template</h2>
 		</header>
-		<div class="content">
-			<img id="choosedtemplate" class="showTemplate" src="inc/img/templates/testowe.png" />
+		<div class="templates">
+			<!-- <div class="content"> -->
+			<!-- <img id="choosedtemplate" class="showTemplate" src="inc/img/templates/testowe.png" /> -->
 		</div>
-
-		<script>
-			// const templates = 
-
-		</script>
 
 
 
@@ -114,7 +111,31 @@
 			</div>
 		</div>
 	</body>
-	<script>
+<script>
+const control = {
+	init(){
+		this.fillTemplates()
+
+	},
+	// async getTemplates(){
+	// 	return await axios.get(base_url + '/api/templates/1')
+	// },
+	async fillTemplates(){
+		const { data } = await axios.get(base_url + '/api/templates/1')
+		data.forEach( img => {
+			const template = document.createElement("div")
+			template.innerHTML = `<img src="${base_url}/templates/${img}" alt="xd">`
+			document.querySelector(".templates").append(template)
+		})
+	}
+
+
+
+}
+control.init()
+
+
+// old
 		function suwak(id){
 			var suwak = document.getElementById("suwak"+id);
 			if(suwak.style.cssFloat == "right"){
@@ -129,7 +150,7 @@
 			var xhttp = new XMLHttpRequest();
 			xhttp.onreadystatechange = function() {
 				if (this.readyState == 4 && this.status == 200) {
-					refreshInfo(this.responseText);
+					// refreshInfo(this.responseText);
 					closePOP();
 				}
 			};
@@ -144,19 +165,19 @@
 			document.getElementById("popup").style.display = "none";
 			document.getElementById("search_popup").style.display = "none";
 		}
-		function refreshInfo(val){
-			line = val.split(";");
-			develop = line[0].split("|")[1];
-			var suwak = document.getElementById("suwak0");
-			if(develop == 1){
-				suwak.style.cssFloat = "left";
-			}else{
-				suwak.style.cssFloat = "right";
-			}
-			template = line[1].split("|")[1];			
-			document.getElementById("choosedtemplate").src = "inc/img/templates/"+template;
-			console.log("d:"+develop+"; t:"+template);
-		}
+		// function refreshInfo(val){
+		// 	line = val.split(";");
+		// 	develop = line[0].split("|")[1];
+		// 	var suwak = document.getElementById("suwak0");
+		// 	if(develop == 1){
+		// 		suwak.style.cssFloat = "left";
+		// 	}else{
+		// 		suwak.style.cssFloat = "right";
+		// 	}
+		// 	template = line[1].split("|")[1];			
+		// 	document.getElementById("choosedtemplate").src = "inc/img/templates/"+template;
+		// 	console.log("d:"+develop+"; t:"+template);
+		// }
 		changeValue('refresh');
 	
 		/* SZUKANIE ZDJĘĆ */

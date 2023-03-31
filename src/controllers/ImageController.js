@@ -11,7 +11,7 @@ module.exports = new class ImageController {
   * @param {Object} res - Response object
   * @returns {Object} - Returns a JSON object
   */
-  captureGET (req, res) {
+  captureGET( req, res) {
     //   $o = fopen("../bat/capture.bat","w");
     // 	fwrite($o,getSRCdc());
     // 	fclose($o);	
@@ -39,7 +39,7 @@ module.exports = new class ImageController {
   /**
    * Getting image from WebCam
    */
-  capturePOST ( req, res) {
+  capturePOST( req, res) {
     const tempPath = req.file.path;
     const dir = files.createDirIfNotExists(path.join(__dirname, "../../storage/captured"));
     const targetPath = dir + "/img_"+ fs.readdirSync(dir).length +".jpg";
@@ -53,7 +53,7 @@ module.exports = new class ImageController {
    * Combine images with template
    * https://sharp.pixelplumbing.com/api-composite
    */
-  template ( req, res ) {
+  template( req, res ) {
     const dir = path.join(__dirname, "../../storage/captured");
     const imgs = [ 2, 1, 0 ].map( i => dir + "\\img_" + ( files.getMaxFileNumber(dir) - i ) + ".jpg" )
     const template_path = path.join(__dirname, "../models/Templates/blank_template3.png");
@@ -70,4 +70,18 @@ module.exports = new class ImageController {
       res.json({ "message": "template created" })
     });
   }
+
+  templatesGET( req, res ){
+    // list or paginate templates here
+    res.json(fs.readdirSync(path.join(__dirname, "../models/Templates/")))
+  }
+
+  capturesGET( req, res ){
+    res.json({ "state": "inprogress" })
+  }
+
+  resultsGET( req, res ){
+    res.json({ "state": "inprogress" })
+  }
+
 }

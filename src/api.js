@@ -20,4 +20,9 @@ const PrintController = require('./controllers/PrintController')
   router.route('/faceRecognition').get( FaceRecognitionController.detect )
   router.route('/print').get( PrintController.print )
 
+  router.route('/templates/:page').get( ImageController.templatesGET.bind(ImageController) )
+  router.route('/caputes/:page').get( ImageController.capturesGET.bind(ImageController) )
+  router.route('/results/:page').get( ImageController.resultsGET.bind(ImageController) )
+  
+
 module.exports = router
