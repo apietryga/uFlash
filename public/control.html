@@ -14,12 +14,27 @@
 		<h1>uFlash* Control Panel</h1>
 	</header>
 	<section>
-		<header>
-			<h2>Template</h2>
-		</header>
-		<div class="templates"></div>
 
+		<article>
+			<header>
+				<h2>Template</h2>
+			</header>
+			<div class="wrapper templates"></div>
+		</article>
 
+		<article>
+			<header>
+				<h2>Captures</h2>
+			</header>
+			<div class="wrapper captured"></div>
+		</article>
+
+		<article>
+			<header>
+				<h2>Results</h2>
+			</header>
+			<div class="wrapper results"></div>
+		</article>
 
 	</section>
 
@@ -84,7 +99,7 @@
 		</table>
 	-->
 		
-	
+<!-- 	
 	<div class="main_popUp" id="popup">
 			<div class="top_popUp">
 				<p class="p_popUp" onclick="closePOP()">X</p>
@@ -107,31 +122,69 @@
 			</div><br />
 			<div id="search_content">
 			</div>
-		</div>
+		</div> -->
 
 		<footer>
-			<p>
-				uFlash* Control v.1.0
-			</p>
+			<p> uFlash* Control v.1.0 </p>
 		</footer>
 	</body>
 <script>
 const control = {
-	init(){
-		this.fillTemplates()
+	async init(){
+		// this.fillTemplates()
+		// this.fillCaptures()
+		for(type of [
+			{ type : 'templates', path : '/templates/' },
+			{ type : 'captured', path : '/storage/captured/' },
+			{ type : 'results', path : '/storage/results/' }
+		]){
+			await this.fillPhotos(type)
+		}
 	},
-	async fillTemplates(){
-		const { data } = await axios.get(base_url + '/api/templates/1')
+	// async fillTemplates(){
+	// 	const { data } = await axios.get(base_url + '/api/templates/1')
+	// 	data.forEach( img => {
+	// 		const template = document.createElement("div")
+	// 		template.innerHTML = `<img 
+	// 			src="${base_url}/templates/${img.src}" 
+	// 			alt="${img.src}"
+	// 			class="${ img.active ? 'active' : ''}"
+	// 		>`
+	// 		document.querySelector(".templates").append(template)
+	// 	})
+	// },
+	// async fillCaptures(){
+	// 	const { data } = await axios.get(base_url + '/api/captures/1')
+	// 	console.log( data )
+	// 	data.forEach( img => {
+	// 		const template = document.createElement("div")
+	// 		template.innerHTML = `<img 
+	// 			src="${base_url}/storage/captured/${img.src}" 
+	// 			alt="${img.src}"
+	// 			class="${ img.active ? 'active' : ''}"
+	// 		>`
+	// 		document.querySelector(".captured").append(template)
+	// 	})
+	// },
+
+	// async fillPhotos(type){
+	async fillPhotos({ type, path }){
+		// const { data } = await axios.get(base_url + '/api/captures/1')
+		const { data } = await axios.get(base_url + '/api/' + type + '/1')
+		console.log( data )
 		data.forEach( img => {
 			const template = document.createElement("div")
+			// src="${base_url}/storage/captured/${img.src}" 
+			// src="${ base_url }/storage/${ type }/${ img.src }" 
 			template.innerHTML = `<img 
-				src="${base_url}/templates/${img.src}" 
-				alt="${img.src}"
-				class="${ img.active ? 'active' : ''}"
+				src="${ base_url + path + img.src }" 
+				alt="${ img.src }"
+				class="${ img.active ? 'active' : '' }"
 			>`
-			document.querySelector(".templates").append(template)
+			// document.querySelector(".captured").append(template)
+			document.querySelector("." + type).append(template)
 		})
-	}
+	},
 
 
 
@@ -140,67 +193,67 @@ control.init()
 
 
 // old
-		function suwak(id){
-			var suwak = document.getElementById("suwak"+id);
-			if(suwak.style.cssFloat == "right"){
-				suwak.style.cssFloat = "left";
-				changeValue('develop','1');
-			}else{
-				suwak.style.cssFloat = "right";
-				changeValue('develop','0');
-			}
-		}
-		function changeValue(what,how = 0){
-			var xhttp = new XMLHttpRequest();
-			xhttp.onreadystatechange = function() {
-				if (this.readyState == 4 && this.status == 200) {
-					// refreshInfo(this.responseText);
-					closePOP();
-				}
-			};
-			xhttp.open("GET", "control_inc/php/control_func.php?g=ajax&"+what+"="+how, true);
-			xhttp.send();	
-		}
-		function displayTemplates(){
-			document.getElementById("popup").style.display = "block";
-			
-		}
-		function closePOP(){
-			document.getElementById("popup").style.display = "none";
-			document.getElementById("search_popup").style.display = "none";
-		}
-		// function refreshInfo(val){
-		// 	line = val.split(";");
-		// 	develop = line[0].split("|")[1];
-		// 	var suwak = document.getElementById("suwak0");
-		// 	if(develop == 1){
+		// function suwak(id){
+		// 	var suwak = document.getElementById("suwak"+id);
+		// 	if(suwak.style.cssFloat == "right"){
 		// 		suwak.style.cssFloat = "left";
+		// 		changeValue('develop','1');
 		// 	}else{
 		// 		suwak.style.cssFloat = "right";
+		// 		changeValue('develop','0');
 		// 	}
-		// 	template = line[1].split("|")[1];			
-		// 	document.getElementById("choosedtemplate").src = "inc/img/templates/"+template;
-		// 	console.log("d:"+develop+"; t:"+template);
 		// }
-		changeValue('refresh');
+		// function changeValue(what,how = 0){
+		// 	var xhttp = new XMLHttpRequest();
+		// 	xhttp.onreadystatechange = function() {
+		// 		if (this.readyState == 4 && this.status == 200) {
+		// 			// refreshInfo(this.responseText);
+		// 			closePOP();
+		// 		}
+		// 	};
+		// 	xhttp.open("GET", "control_inc/php/control_func.php?g=ajax&"+what+"="+how, true);
+		// 	xhttp.send();	
+		// }
+		// function displayTemplates(){
+		// 	document.getElementById("popup").style.display = "block";
+			
+		// }
+		// function closePOP(){
+		// 	document.getElementById("popup").style.display = "none";
+		// 	document.getElementById("search_popup").style.display = "none";
+		// }
+		// // function refreshInfo(val){
+		// // 	line = val.split(";");
+		// // 	develop = line[0].split("|")[1];
+		// // 	var suwak = document.getElementById("suwak0");
+		// // 	if(develop == 1){
+		// // 		suwak.style.cssFloat = "left";
+		// // 	}else{
+		// // 		suwak.style.cssFloat = "right";
+		// // 	}
+		// // 	template = line[1].split("|")[1];			
+		// // 	document.getElementById("choosedtemplate").src = "inc/img/templates/"+template;
+		// // 	console.log("d:"+develop+"; t:"+template);
+		// // }
+		// changeValue('refresh');
 	
-		/* SZUKANIE ZDJĘĆ */
-		function searchIMG(){
-			var xmlhttp;
-			if(window.XMLHttpRequest){
-				xmlhttp = new XMLHttpRequest;
-			}else{
-				xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-			}
-			xmlhttp.onreadystatechange = function(){
-			   if(xmlhttp.readyState == 4 && xmlhttp.status == 200){
-					document.getElementById("search_popup").style.display = "block";
-					document.getElementById("search_content").innerHTML = this.responseText;
-			   }
-			}
-			xmlhttp.open("POST", "control_inc/php/control_func.php?load_photos=true");
-			xmlhttp.send();					
-		}
-		/* END OF SZUKANIE ZDJĘĆ */
+		// /* SZUKANIE ZDJĘĆ */
+		// function searchIMG(){
+		// 	var xmlhttp;
+		// 	if(window.XMLHttpRequest){
+		// 		xmlhttp = new XMLHttpRequest;
+		// 	}else{
+		// 		xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+		// 	}
+		// 	xmlhttp.onreadystatechange = function(){
+		// 	   if(xmlhttp.readyState == 4 && xmlhttp.status == 200){
+		// 			document.getElementById("search_popup").style.display = "block";
+		// 			document.getElementById("search_content").innerHTML = this.responseText;
+		// 	   }
+		// 	}
+		// 	xmlhttp.open("POST", "control_inc/php/control_func.php?load_photos=true");
+		// 	xmlhttp.send();					
+		// }
+		// /* END OF SZUKANIE ZDJĘĆ */
 	</script>
 </html>

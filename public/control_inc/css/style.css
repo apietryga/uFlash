@@ -16,19 +16,19 @@ body > section{
 	border:2px double #000;
 	color:#000;
 }
-.templates{
+.wrapper{
 	display:flex;
 	overflow-x:auto;;
 	height:calc(30vh + 4px);
 }
-.templates div{
+.wrapper div{
 	margin:0 .2em;
 }
-.templates div img{
+.wrapper div img{
 	border:2px dashed #000;
 	max-height:30vh;
 }
-.templates div .active{
+.wrapper div .active{
 	border:2px solid red;
 }
 

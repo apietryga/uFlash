@@ -74,29 +74,28 @@ module.exports = new class ImageController {
     });
   }
 
-  templatesGET( req, res ){
-    // list or paginate templates here
-    const list = fs.readdirSync(path.join(__dirname, "../models/Templates/"))
+  listPhotos(pth){
+    return fs.readdirSync(pth)
+    .filter(src => ["png", "jpg"].includes(src.split(".")[1]))
+    .map(src => {
+      return {
+        "src": src,
+        "active": src === this.defaultTemplate
+      }
+    })
+    .sort((a, b) => a.active ? -1 : b.active ? 1 : -1)
+  }
 
-    res.json(list
-      .filter(src => ["png", "jpg"].includes(src.split(".")[1]))
-      .map(src => {
-        return {
-          "src": src,
-          "path": path.join(__dirname, "../models/Templates/", src),
-          "active": src === this.defaultTemplate
-        }
-      })
-      .sort((a, b) => a.active ? -1 : b.active ? 1 : -1)
-    )
+  templatesGET( req, res ){
+    res.json(this.listPhotos(path.join(__dirname, "../models/Templates/")))
   }
 
   capturesGET( req, res ){
-    res.json({ "state": "inprogress" })
+    res.json(this.listPhotos(path.join(__dirname, "../../storage/captured")))
   }
 
   resultsGET( req, res ){
-    res.json({ "state": "inprogress" })
+    res.json(this.listPhotos(path.join(__dirname, "../../storage/results")))
   }
 
 }
