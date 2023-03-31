@@ -90,6 +90,11 @@ module.exports = new class ImageController {
     res.json(this.listPhotos(path.join(__dirname, "../models/Templates/")))
   }
 
+  templatesPOST( req, res ){
+    this.defaultTemplate = req.body.src;
+    res.json(this.listPhotos(path.join(__dirname, "../models/Templates/")))
+  }
+
   capturesGET( req, res ){
     res.json(this.listPhotos(path.join(__dirname, "../../storage/captured")))
   }

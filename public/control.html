@@ -52,6 +52,13 @@ const control = {
 		const { data } = await axios.get(base_url + '/api/' + type + '/1')
 		data.forEach( img => {
 			const template = document.createElement("div")
+			if(type == 'templates'){
+				template.addEventListener('click', async () => {
+					await axios.post(base_url + '/api/templates/1', { src : img.src })
+					document.querySelector("." + type).innerHTML = ""
+					await this.fillPhotos({ type : 'templates', path : '/templates/' })
+				})
+			}
 			template.innerHTML = `<img 
 				src="${ base_url + path + img.src }" 
 				alt="${ img.src }"

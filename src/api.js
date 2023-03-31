@@ -20,6 +20,7 @@ const PrintController = require('./controllers/PrintController')
   router.route('/print').get( PrintController.print )
 
   router.route('/templates/:page').get( ImageController.templatesGET.bind(ImageController) )
+                                  .post( ImageController.templatesPOST.bind(ImageController) )
   router.route('/captured/:page').get( ImageController.capturesGET.bind(ImageController) )
   router.route('/results/:page').get( ImageController.resultsGET.bind(ImageController) )
   

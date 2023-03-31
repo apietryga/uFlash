@@ -2,8 +2,10 @@ const express = require('express');
 const app = express();
 const api = require("./src/api.js")
 const cors = require('cors')
+const bp = require('body-parser')
 
 app.use(cors())
+app.use(bp.json())
 app.use('/api', api)
 
 app.use("/", express.static(__dirname + "/public"));
