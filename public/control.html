@@ -17,25 +17,23 @@
 		<header>
 			<h2>Template</h2>
 		</header>
-		<div class="templates">
-			<!-- <div class="content"> -->
-			<!-- <img id="choosedtemplate" class="showTemplate" src="inc/img/templates/testowe.png" /> -->
-		</div>
+		<div class="templates"></div>
 
 
 
 	</section>
 
+	<!--
 		<table border="1" id="mainTbl">
-			<!-- <tr>
+				 <tr>
 				<td class="kranceTD">
 					SHINYFRAME CONTROL PANEL
 				</td>
-			</tr> -->
+			</tr> 
 			<tr>
 				<td>
 					<table class="cntrlTbl" >
-						<!-- <tr>
+							<tr>
 							<td class="leftTD">
 								Tryb deweloperski:
 							</td>
@@ -44,8 +42,8 @@
 									<div id="suwak0" class="suwAK" style="float:<?=$s0?>;">
 								</div>
 							</td>
-						</tr> -->
-						<!-- <tr>
+						</tr> 
+						<tr>
 							<td class="leftTD">
 								Template:
 							</td>
@@ -56,7 +54,6 @@
 						<td colspan='2' style='text-align:center;'>
 							<button onclick="displayTemplates()">ZMIEŃ</>
 							</td>
-						-->
 						<tr>
 							<td class="leftTD">
 								Znajdź zdjęcie:
@@ -68,14 +65,12 @@
 							</td>
 						</tr>
 						<tr>
-							<!--
 							<td class="leftTD">
 								Stwórz template:
 							</td>
 							<td>
 								<button>STWÓRZ</button>
 							</td>
-							-->
 							
 						</tr>
 					</table>
@@ -87,7 +82,10 @@
 				</td>
 			</tr>
 		</table>
-		<div class="main_popUp" id="popup">
+	-->
+		
+	
+	<div class="main_popUp" id="popup">
 			<div class="top_popUp">
 				<p class="p_popUp" onclick="closePOP()">X</p>
 			</div><br />
@@ -110,21 +108,27 @@
 			<div id="search_content">
 			</div>
 		</div>
+
+		<footer>
+			<p>
+				uFlash* Control v.1.0
+			</p>
+		</footer>
 	</body>
 <script>
 const control = {
 	init(){
 		this.fillTemplates()
-
 	},
-	// async getTemplates(){
-	// 	return await axios.get(base_url + '/api/templates/1')
-	// },
 	async fillTemplates(){
 		const { data } = await axios.get(base_url + '/api/templates/1')
 		data.forEach( img => {
 			const template = document.createElement("div")
-			template.innerHTML = `<img src="${base_url}/templates/${img}" alt="xd">`
+			template.innerHTML = `<img 
+				src="${base_url}/templates/${img.src}" 
+				alt="${img.src}"
+				class="${ img.active ? 'active' : ''}"
+			>`
 			document.querySelector(".templates").append(template)
 		})
 	}

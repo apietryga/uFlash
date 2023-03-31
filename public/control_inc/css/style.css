@@ -1,21 +1,35 @@
 /* NEW STYLES */
+*{
+	margin:0;
+	box-sizing: border-box;
+}
 body{
 	background-color:#000;
 	color:#fff;
 }
+h1{
+	margin:.5rem 1rem;
+}
+body > section{
+	padding:.5rem;
+	background: #fff;
+	border:2px double #000;
+	color:#000;
+}
 .templates{
-	border:2px dashed red;
 	display:flex;
 	overflow-x:auto;;
+	height:calc(30vh + 4px);
 }
 .templates div{
-	border:2ox dashed blue;
+	margin:0 .2em;
 }
-
 .templates div img{
-	border:2px dashed green;
-	/* max-width: */
-	max-height:20vh;
+	border:2px dashed #000;
+	max-height:30vh;
+}
+.templates div .active{
+	border:2px solid red;
 }
 
 /* OLD STYLES */

@@ -4,6 +4,8 @@ const sharp = require('sharp');
 const files = require('../modules/files')
 module.exports = new class ImageController {
 
+  defaultTemplate = "blank_template3.png"
+
   /**
   * Getting image from external EOS camera
   * !NOT TESTED YET! - GETTED FROM public/inc/php/functions.php
@@ -56,7 +58,8 @@ module.exports = new class ImageController {
   template( req, res ) {
     const dir = path.join(__dirname, "../../storage/captured");
     const imgs = [ 2, 1, 0 ].map( i => dir + "\\img_" + ( files.getMaxFileNumber(dir) - i ) + ".jpg" )
-    const template_path = path.join(__dirname, "../models/Templates/blank_template3.png");
+    // const template_path = path.join(__dirname, "../models/Templates/blank_template3.png");
+    const template_path = path.join(__dirname, "../models/Templates/" + this.defaultTemplate);
     const outdir = files.createDirIfNotExists(path.join(__dirname, "../../storage/results/"));
     const output_path = path.join(__dirname, "../../storage/results/output_" + ( files.getMaxFileNumber(outdir) + 1 ) + ".png");
     sharp(template_path)
@@ -73,7 +76,19 @@ module.exports = new class ImageController {
 
   templatesGET( req, res ){
     // list or paginate templates here
-    res.json(fs.readdirSync(path.join(__dirname, "../models/Templates/")))
+    const list = fs.readdirSync(path.join(__dirname, "../models/Templates/"))
+
+    res.json(list
+      .filter(src => ["png", "jpg"].includes(src.split(".")[1]))
+      .map(src => {
+        return {
+          "src": src,
+          "path": path.join(__dirname, "../models/Templates/", src),
+          "active": src === this.defaultTemplate
+        }
+      })
+      .sort((a, b) => a.active ? -1 : b.active ? 1 : -1)
+    )
   }
 
   capturesGET( req, res ){
