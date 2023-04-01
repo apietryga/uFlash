@@ -1,6 +1,8 @@
-# uFlash*
+![uFlash Logo](public/img/logo_bordered.png)
+<!-- # uFlash* -->
 Photobooth system prepared for mirrored booths [read more](https://apietryga.github.io/projects/uflash)
 
+![Prototype field](https://apietryga.github.io/img/contents/uflash_praca.webp)
 ## Installation
 Software tested on Rasberry Pi 3 and here's the process of configuring this device:
 
