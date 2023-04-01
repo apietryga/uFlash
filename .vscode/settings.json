@@ -1,7 +1,0 @@
-{
-  "liveServer.settings.ignoreFiles": [
-    ".vscode/**",
-    "temp/**",
-    "storage/**",
-  ]
-}
