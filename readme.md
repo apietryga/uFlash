@@ -40,7 +40,10 @@ To develop project just clone it, install, as showed above, and then install nod
 npm i nodemon -g
 npm run dev
 ```
+then, you can see client version on 
+[localhost:3000](http://localhost:3000/)
+and the development version with all nessesary tools on
+[localhost:3000/?dev=on](http://localhost:3000/?dev=on)
 
-
-## Ubutu packages to run hotspot 
-sudoa apt install iw
+## Controller 
+On [localhost:3000/control.html](http://localhost:3000/control.html) you can change configuarion, and see captured photos and results.
